@@ -2,13 +2,17 @@
     <mat-icon>account_circle</mat-icon>
 </button>
 <mat-menu #menu="matMenu">
-    <span mat-menu-item>PlayerId</span>
+    @if(playerId()){
+    <span mat-menu-item><span>{{playerId()}}</span></span>
     <button mat-menu-item>
         <mat-icon>exit_to_app</mat-icon>
         <span>Logout</span>
     </button>
+    }
+    @else {
     <button mat-menu-item>
         <mat-icon>exit_to_app</mat-icon>
         <span>Login</span>
     </button>
+    }
 </mat-menu>
