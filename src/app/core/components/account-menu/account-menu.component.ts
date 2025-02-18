@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
@@ -13,22 +13,22 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
   styleUrl: './account-menu.component.scss'
 })
 export class AccountMenuComponent {
-  private readonly userService = inject(UserService);
+  private readonly authService = inject(AuthService);
   private readonly dialog = inject(MatDialog)
 
   playerId(): string {
-    return this.userService.getPlayerId();
+    return this.authService.getPlayerId();
   }
 
   logout(): void {
-    this.userService.logout();
+    this.authService.logout();
   }
 
   login(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent, {});
     dialogRef.afterClosed().subscribe(playerId => {
       if (playerId) {
-        this.userService.login(playerId);
+        this.authService.login(playerId);
       }
     });
   }

@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountMenuComponent } from './account-menu.component';
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 
 describe('AccountMenuComponent', () => {
   let component: AccountMenuComponent;
   let fixture: ComponentFixture<AccountMenuComponent>;
-  let userServiceSpy: jasmine.SpyObj<UserService>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
   let dialogSpy: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AccountMenuComponent],
       providers: [
-        { provide: UserService, useValue: jasmine.createSpyObj('UserService', ['getPlayerId', 'login', 'logout']) },
+        { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId', 'login', 'logout']) },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) }
       ]
     })
@@ -23,7 +23,7 @@ describe('AccountMenuComponent', () => {
 
     fixture = TestBed.createComponent(AccountMenuComponent);
     component = fixture.componentInstance;
-    userServiceSpy = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     dialogSpy = TestBed.inject(MatDialog) as jasmine.SpyObj<MatDialog>;
     fixture.detectChanges();
   });
@@ -32,14 +32,14 @@ describe('AccountMenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get player id from user service', () => {
-    userServiceSpy.getPlayerId.and.returnValue("Alice");
+  it('should get player id from auth service', () => {
+    authServiceSpy.getPlayerId.and.returnValue("Alice");
     expect(component.playerId()).toBe("Alice");
   });
 
   it('should logout user on logout', () => {
     component.logout();
-    expect(userServiceSpy.logout).toHaveBeenCalled();
+    expect(authServiceSpy.logout).toHaveBeenCalled();
   });
 
   describe('login', () => {
@@ -52,8 +52,8 @@ describe('AccountMenuComponent', () => {
       expect(dialogSpy.open).toHaveBeenCalled();
     });
 
-    it('should login user on dialog close', () => {
-      expect(userServiceSpy.login).toHaveBeenCalledWith("Alice");
+    it('should login user after dialog close', () => {
+      expect(authServiceSpy.login).toHaveBeenCalledWith("Alice");
     });
   });
 });
