@@ -22,5 +22,10 @@ export class AccountMenuComponent {
 
   login(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent, {});
+    dialogRef.afterClosed().subscribe(playerId => {
+      if (playerId) {
+        this.userService.login(playerId);
+      }
+    });
   }
 }

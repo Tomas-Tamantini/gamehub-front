@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccountMenuComponent } from './account-menu.component';
 import { UserService } from '../../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
+import { of } from 'rxjs';
 
 describe('AccountMenuComponent', () => {
   let component: AccountMenuComponent;
@@ -14,7 +15,7 @@ describe('AccountMenuComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AccountMenuComponent],
       providers: [
-        { provide: UserService, useValue: jasmine.createSpyObj('UserService', ['getPlayerId']) },
+        { provide: UserService, useValue: jasmine.createSpyObj('UserService', ['getPlayerId', 'login']) },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) }
       ]
     })
@@ -36,8 +37,18 @@ describe('AccountMenuComponent', () => {
     expect(component.playerId()).toBe("Alice");
   });
 
-  it('should open login dialog on login', () => {
-    component.login();
-    expect(dialogSpy.open).toHaveBeenCalled();
+  describe('login', () => {
+    beforeEach(() => {
+      dialogSpy.open.and.returnValue({ afterClosed: () => of('Alice') } as any);
+      component.login();
+    });
+
+    it('should open login dialog on login', () => {
+      expect(dialogSpy.open).toHaveBeenCalled();
+    });
+
+    it('should login user on dialog close', () => {
+      expect(userServiceSpy.login).toHaveBeenCalledWith("Alice");
+    });
   });
 });
