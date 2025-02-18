@@ -10,12 +10,12 @@ To start a local development server, run:
 ng serve
 ```
 
-## Building
+## Deploying to github pages
 
-To build the project run:
+To deploy the project to github pages, run:
 
 ```bash
-ng build
+npm run deploy
 ```
 
 This will compile your project and store the build artifacts in the `dist/` directory.
