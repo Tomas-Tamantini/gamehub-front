@@ -29,11 +29,15 @@ export class LoginDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<LoginDialogComponent>);
   readonly playerId = model<string>();
 
+  trimmedPlayerId(): string {
+    return this.playerId()?.trim() ?? '';
+  }
+
   onCancel(): void {
     this.dialogRef.close();
   }
 
   onSubmit(): void {
-    this.dialogRef.close(this.playerId()?.trim());
+    this.dialogRef.close(this.trimmedPlayerId());
   }
 }
