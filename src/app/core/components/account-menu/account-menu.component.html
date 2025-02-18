@@ -4,7 +4,7 @@
 <mat-menu #menu="matMenu">
     @if(playerId()){
     <span mat-menu-item><span>{{playerId()}}</span></span>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
         <span>Logout</span>
     </button>

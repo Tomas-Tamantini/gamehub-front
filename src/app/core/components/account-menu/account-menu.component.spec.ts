@@ -15,7 +15,7 @@ describe('AccountMenuComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AccountMenuComponent],
       providers: [
-        { provide: UserService, useValue: jasmine.createSpyObj('UserService', ['getPlayerId', 'login']) },
+        { provide: UserService, useValue: jasmine.createSpyObj('UserService', ['getPlayerId', 'login', 'logout']) },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) }
       ]
     })
@@ -37,13 +37,18 @@ describe('AccountMenuComponent', () => {
     expect(component.playerId()).toBe("Alice");
   });
 
+  it('should logout user on logout', () => {
+    component.logout();
+    expect(userServiceSpy.logout).toHaveBeenCalled();
+  });
+
   describe('login', () => {
     beforeEach(() => {
       dialogSpy.open.and.returnValue({ afterClosed: () => of('Alice') } as any);
       component.login();
     });
 
-    it('should open login dialog on login', () => {
+    it('should open login dialog', () => {
       expect(dialogSpy.open).toHaveBeenCalled();
     });
 

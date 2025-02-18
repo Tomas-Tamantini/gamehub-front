@@ -20,6 +20,10 @@ export class AccountMenuComponent {
     return this.userService.getPlayerId();
   }
 
+  logout(): void {
+    this.userService.logout();
+  }
+
   login(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent, {});
     dialogRef.afterClosed().subscribe(playerId => {
