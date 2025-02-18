@@ -34,6 +34,6 @@ export class LoginDialogComponent {
   }
 
   onSubmit(): void {
-    this.dialogRef.close(this.playerId());
+    this.dialogRef.close(this.playerId()?.trim());
   }
 }

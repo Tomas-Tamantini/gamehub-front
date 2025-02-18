@@ -44,7 +44,7 @@ describe('LoginDialogComponent', () => {
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      component.playerId.set('Alice');
+      component.playerId.set(' Alice ');
       component.onSubmit();
     });
 
@@ -52,8 +52,8 @@ describe('LoginDialogComponent', () => {
       expect(dialogRefSpy.close).toHaveBeenCalled();
     });
 
-    it('should return playerId', () => {
-      expect(dialogRefSpy.close).toHaveBeenCalledWith("Alice");
+    it('should trim and return playerId', () => {
+      expect(dialogRefSpy.close).toHaveBeenCalledWith('Alice');
     });
   });
 });
