@@ -2,8 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountMenuComponent } from './account-menu.component';
 import { AuthService } from '../../services/auth.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 describe('AccountMenuComponent', () => {
   let component: AccountMenuComponent;
@@ -44,7 +45,10 @@ describe('AccountMenuComponent', () => {
 
   describe('login', () => {
     beforeEach(() => {
-      dialogSpy.open.and.returnValue({ afterClosed: () => of('Alice') } as any);
+      dialogSpy.open.and.returnValue(
+        {
+          afterClosed: () => of('Alice')
+        } as MatDialogRef<LoginDialogComponent>);
       component.login();
     });
 
