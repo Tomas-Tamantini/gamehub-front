@@ -1,18 +1,5 @@
 <mat-toolbar>
     <span>China</span>
     <span class="spacer"></span>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>account_circle</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <span mat-menu-item>PlayerId</span>
-        <button mat-menu-item>
-            <mat-icon>exit_to_app</mat-icon>
-            <span>Logout</span>
-        </button>
-        <button mat-menu-item>
-            <mat-icon>exit_to_app</mat-icon>
-            <span>Login</span>
-        </button>
-    </mat-menu>
+    <app-account-menu></app-account-menu>
 </mat-toolbar>
