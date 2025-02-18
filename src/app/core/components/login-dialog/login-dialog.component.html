@@ -1,1 +1,11 @@
-<p>login-dialog works!</p>
+<h2 mat-dialog-title>Login</h2>
+<mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Player ID</mat-label>
+        <input matInput [(ngModel)]="playerId" (keyup.enter)="onSubmit()" />
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button (click)="onSubmit()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>
