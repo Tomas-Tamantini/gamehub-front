@@ -4,8 +4,17 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
+  private readonly playerIdKey = 'gamehubPlayerId';
 
   getPlayerId(): string {
-    return "Alice";
+    return localStorage.getItem(this.playerIdKey) || '';
+  }
+
+  login(playerId: string): void {
+    localStorage.setItem(this.playerIdKey, playerId);
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.playerIdKey);
   }
 }
