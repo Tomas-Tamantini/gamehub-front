@@ -3,6 +3,7 @@ import { RoomSummary } from '../room-summary.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-room-card',
@@ -13,6 +14,11 @@ import { Router } from '@angular/router';
 export class RoomCardComponent {
   room = input.required<RoomSummary>();
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
+  canRejoin() {
+    return this.room().offlinePlayers.includes(this.authService.getPlayerId());
+  }
 
   canJoin() {
     return !this.room().isFull;
