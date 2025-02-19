@@ -1,5 +1,5 @@
 import { Component, inject, input } from '@angular/core';
-import { RoomSummary } from '../../models/room-summary.model';
+import { RoomSummary } from '../room-summary.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
