@@ -10,6 +10,7 @@
         <p class="white-text">Players: {{room().playerIds.length}}/{{room().capacity}}</p>
     </mat-card-content>
     <mat-card-actions align="end">
-        <button mat-flat-button (click)="joinRoom()" [disabled]="!canJoin()">Join</button>
+        <button mat-button (click)="enterRoom('watch')">Watch</button>
+        <button mat-flat-button (click)="enterRoom('join')" [disabled]="!canJoin()">Join</button>
     </mat-card-actions>
 </mat-card>

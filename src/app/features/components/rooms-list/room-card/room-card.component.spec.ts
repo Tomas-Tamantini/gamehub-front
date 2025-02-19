@@ -42,17 +42,27 @@ describe('RoomCardComponent', () => {
     expect(component.canJoin()).toBeFalse();
   });
 
-  describe('join game', () => {
-    beforeEach(() => {
-      component.joinRoom();
-    });
-
+  describe('enter room', () => {
     it('should redirect to game page', () => {
+      component.enterRoom('join');
       const expectedRoute = ['/room', 123];
       expect(navigateSpy).toHaveBeenCalledWith(expectedRoute, jasmine.any(Object));
     });
 
     it('should redirect with action "join"', () => {
+      component.enterRoom('join');
+      const expectedParams = { queryParams: { action: 'join' } };
+      expect(navigateSpy).toHaveBeenCalledWith(jasmine.any(Array), expectedParams);
+    });
+
+    it('should redirect with action "watch"', () => {
+      component.enterRoom('watch');
+      const expectedParams = { queryParams: { action: 'join' } };
+      expect(navigateSpy).toHaveBeenCalledWith(jasmine.any(Array), expectedParams);
+    });
+
+    it('should redirect with action "rejoin"', () => {
+      component.enterRoom('rejoin');
       const expectedParams = { queryParams: { action: 'join' } };
       expect(navigateSpy).toHaveBeenCalledWith(jasmine.any(Array), expectedParams);
     });

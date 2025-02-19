@@ -18,7 +18,7 @@ export class RoomCardComponent {
     return !this.room().isFull;
   }
 
-  joinRoom() {
-    this.router.navigate(['/room', this.room().roomId], { queryParams: { action: 'join' } });
+  enterRoom(action: 'join' | 'watch' | 'rejoin') {
+    this.router.navigate(['/room', this.room().roomId], { queryParams: { action } });
   }
 }
