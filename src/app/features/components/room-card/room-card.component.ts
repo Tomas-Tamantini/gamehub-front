@@ -12,5 +12,11 @@ import { MatButtonModule } from '@angular/material/button';
 export class RoomCardComponent {
   room = input.required<RoomSummary>();
 
-  joinRoom() { }
+  canJoin() {
+    return !this.room().isFull;
+  }
+
+  joinRoom() {
+    throw new Error('Not implemented');
+  }
 }
