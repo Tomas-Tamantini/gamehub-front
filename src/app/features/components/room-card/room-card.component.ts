@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { RoomSummary } from '../rooms-list/room-summary.model';
+import { RoomSummary } from '../../models/room-summary.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 

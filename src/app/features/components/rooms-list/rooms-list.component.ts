@@ -1,5 +1,5 @@
 import { Component, model } from '@angular/core';
-import { RoomSummary } from './room-summary.model';
+import { RoomSummary } from '../../models/room-summary.model';
 import { RoomCardComponent } from '../room-card/room-card.component';
 
 const mockRoomsData: RoomSummary[] = [
