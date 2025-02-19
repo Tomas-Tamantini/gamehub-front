@@ -2,6 +2,12 @@
     color: #d8d8d8
 }
 
-.max-width-400 {
-    max-width: 400px;
+.spacer {
+    flex: 1;
+}
+
+.room-card {
+    margin: 5px;
+    min-width: 280px;
+    min-height: 180px;
 }
