@@ -1,0 +1,15 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>
+            <span class="white-text">
+                China {{room().roomId}}
+            </span>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p class="white-text">Players: {{room().playerIds.length}}/{{room().capacity}}</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-flat-button (click)="joinRoom()">Join</button>
+    </mat-card-actions>
+</mat-card>

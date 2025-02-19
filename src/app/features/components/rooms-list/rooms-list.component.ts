@@ -1,5 +1,6 @@
 import { Component, model } from '@angular/core';
 import { RoomSummary } from './room-summary.model';
+import { RoomCardComponent } from '../room-card/room-card.component';
 
 const mockRoomsData: RoomSummary[] = [
   { roomId: 1, capacity: 4, playerIds: ["Alice", "Bob"], offlinePlayers: [], isFull: false },
@@ -8,7 +9,7 @@ const mockRoomsData: RoomSummary[] = [
 
 @Component({
   selector: 'app-rooms-list',
-  imports: [],
+  imports: [RoomCardComponent],
   templateUrl: './rooms-list.component.html',
   styleUrl: './rooms-list.component.scss'
 })

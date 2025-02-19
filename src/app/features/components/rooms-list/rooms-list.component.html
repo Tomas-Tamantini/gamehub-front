@@ -1,1 +1,9 @@
-<p>rooms-list works!</p>
+@if(rooms().length > 0){
+@for(room of rooms(); track room.roomId){
+<app-room-card [room]="room"></app-room-card>
+}
+}
+@else {
+<!-- TODO: Design better looking blank slate component -->
+<p>No available game rooms</p>
+}
