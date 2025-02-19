@@ -4,7 +4,8 @@ import { RoomCardComponent } from './room-card/room-card.component';
 
 const mockRoomsData: RoomSummary[] = [
   { roomId: 1, capacity: 4, playerIds: ["Alice", "Bob"], offlinePlayers: [], isFull: false },
-  { roomId: 2, capacity: 4, playerIds: ["Charlie", "David", "Esther", "Frida"], offlinePlayers: ["Frida"], isFull: true }
+  { roomId: 2, capacity: 4, playerIds: ["Charlie", "David", "Esther", "Frida"], offlinePlayers: [], isFull: true },
+  { roomId: 3, capacity: 4, playerIds: ["Charlie", "David", "Esther", "Frida"], offlinePlayers: ["Frida"], isFull: true }
 ]
 
 @Component({
