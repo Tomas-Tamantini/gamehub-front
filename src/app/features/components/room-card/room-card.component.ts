@@ -1,7 +1,8 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { RoomSummary } from '../../models/room-summary.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-card',
@@ -11,12 +12,13 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class RoomCardComponent {
   room = input.required<RoomSummary>();
+  private readonly router = inject(Router);
 
   canJoin() {
     return !this.room().isFull;
   }
 
   joinRoom() {
-    throw new Error('Not implemented');
+    this.router.navigate(['/room', this.room().roomId], { queryParams: { action: 'join' } });
   }
 }

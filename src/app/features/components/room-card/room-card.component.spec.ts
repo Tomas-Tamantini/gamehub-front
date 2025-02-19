@@ -1,20 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RoomCardComponent } from './room-card.component';
 import { ComponentRef } from '@angular/core';
+import { provideRouter, Router } from '@angular/router';
 
 describe('RoomCardComponent', () => {
   let component: RoomCardComponent;
   let componentRef: ComponentRef<RoomCardComponent>;
   let fixture: ComponentFixture<RoomCardComponent>;
+  let router: Router;
+  let navigateSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoomCardComponent]
+      imports: [RoomCardComponent],
+      providers: [provideRouter([])]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(RoomCardComponent);
+    router = TestBed.inject(Router);
+    navigateSpy = spyOn(router, 'navigate');
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     componentRef.setInput('room', { roomId: 123, playerIds: [] });
@@ -36,4 +41,20 @@ describe('RoomCardComponent', () => {
     fixture.detectChanges();
     expect(component.canJoin()).toBeFalse();
   });
+
+  describe('join game', () => {
+    beforeEach(() => {
+      component.joinRoom();
+    });
+
+    it('should redirect to game page', () => {
+      const expectedRoute = ['/room', 123];
+      expect(navigateSpy).toHaveBeenCalledWith(expectedRoute, jasmine.any(Object));
+    });
+
+    it('should redirect with action "join"', () => {
+      const expectedParams = { queryParams: { action: 'join' } };
+      expect(navigateSpy).toHaveBeenCalledWith(jasmine.any(Array), expectedParams);
+    });
+  })
 });
