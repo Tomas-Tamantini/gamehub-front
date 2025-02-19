@@ -1,4 +1,5 @@
 @if(rooms().length > 0){
+<!-- TODO: Use responsive flex-layout -->
 @for(room of rooms(); track room.roomId){
 <app-room-card [room]="room"></app-room-card>
 }
