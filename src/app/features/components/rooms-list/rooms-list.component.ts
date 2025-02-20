@@ -3,6 +3,7 @@ import { RoomSummary } from './room-summary.model';
 import { RoomCardComponent } from './room-card/room-card.component';
 import { HttpService } from '../../../core/services/http.service';
 import { CardsSkeletonComponent } from "../../../core/components/cards-skeleton/cards-skeleton.component";
+import { AlertService } from '../../../core/services/alert.service';
 
 @Component({
   selector: 'app-rooms-list',
@@ -14,6 +15,7 @@ export class RoomsListComponent implements OnInit {
   rooms = model<RoomSummary[]>([]);
   isLoading = model<boolean>(true);
   private readonly httpService = inject(HttpService);
+  private readonly alertService = inject(AlertService);
 
   ngOnInit() {
     this.isLoading.set(true);
@@ -23,7 +25,7 @@ export class RoomsListComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: error => {
-        console.error('Failed to fetch game rooms', error);
+        this.alertService.alertError('Could not get game rooms', error);
         this.isLoading.set(false);
       }
     });
