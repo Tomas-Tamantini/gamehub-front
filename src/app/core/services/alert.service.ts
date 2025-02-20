@@ -1,11 +1,16 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
+  private snackbar = inject(MatSnackBar);
+
   alertError(message: string, debugMsg?: string) {
-    alert(`Error: ${message}`);
+    this.snackbar.open(`Error: ${message}`, 'OK', {
+      duration: 5000
+    });
     if (debugMsg) {
       console.error(debugMsg);
     }
