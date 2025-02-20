@@ -2,9 +2,6 @@ import { PrivateView } from "./private-view.model";
 import { RoomSummary } from "./room-summary.model";
 import { SharedGameState } from "./shared-view.model";
 
-export interface ErrorPayload {
-    error: string;
-}
 
 export interface GameState {
     roomId: number;
@@ -14,7 +11,7 @@ export interface GameState {
 
 export interface ErrorMessage {
     messageType: "ERROR";
-    payload: ErrorPayload;
+    payload: { error: string };
 }
 
 export interface GameRoomUpdateMessage {

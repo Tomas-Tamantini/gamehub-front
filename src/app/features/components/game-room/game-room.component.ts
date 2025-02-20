@@ -1,9 +1,9 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
-import { ErrorPayload, GameState, Message } from '../../../core/models/message.model';
+import { Message } from '../../../core/models/message.model';
 import { RoomSummary } from '../../../core/models/room-summary.model';
 
 @Component({
@@ -17,6 +17,11 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
+  private roomSummary = signal<RoomSummary | null>(null);
+
+  public gameHasStarted = computed(() => {
+    return this.roomSummary()?.isFull ?? false;
+  });
 
   ngOnInit() {
     this.socketService.connect(this.authService.getPlayerId());
@@ -50,26 +55,14 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   handleMessage(msg: Message) {
     switch (msg.messageType) {
       case "ERROR":
-        this.handleErrorMessage(msg.payload);
+        this.alertService.alertError(msg.payload.error);
         break;
       case "GAME_ROOM_UPDATE":
-        this.handleGameRoomUpdateMessage(msg.payload);
+        this.roomSummary.set(msg.payload);
         break;
       case "GAME_STATE":
-        this.handleGameStateMessage(msg.payload);
+        console.log(msg.payload);
         break;
     }
-  }
-
-  private handleErrorMessage(msgPayload: ErrorPayload) {
-    this.alertService.alertError(msgPayload.error);
-  }
-
-  private handleGameRoomUpdateMessage(msgPayload: RoomSummary) {
-    console.log(msgPayload);
-  }
-
-  private handleGameStateMessage(msgPayload: GameState) {
-    console.log(msgPayload);
   }
 }
