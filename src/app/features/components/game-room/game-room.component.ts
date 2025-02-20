@@ -3,7 +3,7 @@ import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
-import { ErrorPayload, Message } from '../../../core/models/message';
+import { Message } from '../../../core/models/message.model';
 
 @Component({
   selector: 'app-game-room',
@@ -30,13 +30,10 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     const roomId = this.route.snapshot.paramMap.get('id');
     const action = this.route.snapshot.queryParamMap.get('action');
     const requestTypeMap = {
-      'join': "JOIN_GAME_BY_ID",
-      'rejoin': "REJOIN_GAME"
+      join: "JOIN_GAME_BY_ID",
+      rejoin: "REJOIN_GAME"
     }
-    if (!action) {
-      this.alertService.alertError(`Invalid action`);
-    }
-    else if (!requestTypeMap.hasOwnProperty(action)) {
+    if (!action || !(action in requestTypeMap)) {
       this.alertService.alertError(`Invalid action: ${action}`);
     }
     else {
@@ -52,8 +49,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   handleMessage(msg: Message) {
     switch (msg.messageType) {
       case "ERROR":
-        const payload = msg.payload as ErrorPayload;
-        this.alertService.alertError(payload.error);
+        this.alertService.alertError(msg.payload.error);
         break;
       case "GAME_ROOM_UPDATE":
         console.log(msg.payload);

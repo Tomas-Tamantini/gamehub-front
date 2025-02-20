@@ -1,5 +1,5 @@
 import { Component, inject, model, OnInit } from '@angular/core';
-import { RoomSummary } from './room-summary.model';
+import { RoomSummary } from '../../../core/models/room-summary.model';
 import { RoomCardComponent } from './room-card/room-card.component';
 import { HttpService } from '../../../core/services/http.service';
 import { CardsSkeletonComponent } from "../../../core/components/cards-skeleton/cards-skeleton.component";

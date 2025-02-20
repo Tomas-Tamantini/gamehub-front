@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RoomSummary } from '../../features/components/rooms-list/room-summary.model';
+import { RoomSummary } from '../models/room-summary.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { ListResponse } from '../models/list-response';
+import { ListResponse } from '../models/list-response.model';
 
 @Injectable({
   providedIn: 'root'
