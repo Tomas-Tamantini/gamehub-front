@@ -3,7 +3,8 @@ import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
-import { Message } from '../../../core/models/message.model';
+import { ErrorPayload, GameState, Message } from '../../../core/models/message.model';
+import { RoomSummary } from '../../../core/models/room-summary.model';
 
 @Component({
   selector: 'app-game-room',
@@ -49,14 +50,26 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   handleMessage(msg: Message) {
     switch (msg.messageType) {
       case "ERROR":
-        this.alertService.alertError(msg.payload.error);
+        this.handleErrorMessage(msg.payload);
         break;
       case "GAME_ROOM_UPDATE":
-        console.log(msg.payload);
+        this.handleGameRoomUpdateMessage(msg.payload);
         break;
       case "GAME_STATE":
-        console.log(msg.payload);
+        this.handleGameStateMessage(msg.payload);
         break;
     }
+  }
+
+  private handleErrorMessage(msgPayload: ErrorPayload) {
+    this.alertService.alertError(msgPayload.error);
+  }
+
+  private handleGameRoomUpdateMessage(msgPayload: RoomSummary) {
+    console.log(msgPayload);
+  }
+
+  private handleGameStateMessage(msgPayload: GameState) {
+    console.log(msgPayload);
   }
 }
