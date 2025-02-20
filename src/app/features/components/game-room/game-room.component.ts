@@ -3,6 +3,7 @@ import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
+import { ErrorPayload, Message } from '../../../core/models/message';
 
 @Component({
   selector: 'app-game-room',
@@ -21,7 +22,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     this.socketService.subcribeOnError(() => {
       this.alertService.alertError("Could not connect to server");
     });
-    this.socketService.subscribeOnMessage(msg => console.log(msg));
+    this.socketService.subscribeOnMessage(msg => this.handleMessage(msg as Message));
     this.sendInitialRequest();
   }
 
@@ -46,5 +47,20 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.socketService.disconnect();
+  }
+
+  handleMessage(msg: Message) {
+    switch (msg.messageType) {
+      case "ERROR":
+        const payload = msg.payload as ErrorPayload;
+        this.alertService.alertError(payload.error);
+        break;
+      case "GAME_ROOM_UPDATE":
+        console.log(msg.payload);
+        break;
+      case "GAME_STATE":
+        console.log(msg.payload);
+        break;
+    }
   }
 }

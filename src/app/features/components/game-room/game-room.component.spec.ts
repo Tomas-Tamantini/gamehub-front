@@ -100,4 +100,11 @@ describe('GameRoomComponent', () => {
       expect(alertServiceSpy.alertError).toHaveBeenCalledWith("Invalid action: play");
     });
   });
+
+  describe('message handling', () => {
+    it('should alert on error message', () => {
+      component.handleMessage({ messageType: "ERROR", payload: { error: 'error message' } });
+      expect(alertServiceSpy.alertError).toHaveBeenCalledWith("error message");
+    });
+  });
 });
