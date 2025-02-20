@@ -27,6 +27,11 @@ describe('WebsocketService', () => {
     expect(globalThis.WebSocket).toHaveBeenCalledWith(`${environment.apiUrl}/ws?player_id=Alice`);
   });
 
+  it('should send messages to the websocket', () => {
+    service.send({ key: "value" });
+    expect(mockWebSocket.send).toHaveBeenCalledWith('{"key":"value"}');
+  });
+
   it('should disconnect the websocket', () => {
     service.disconnect();
     expect(mockWebSocket.close).toHaveBeenCalled();

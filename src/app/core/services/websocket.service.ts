@@ -8,6 +8,7 @@ export class WebsocketService {
   private socket?: WebSocket;
   private callbackOnError?: (error: any) => void;
   private callbackOnMessage?: (message: any) => void;
+  private outgoingMessagesQueue: object[] = [];
 
   subcribeOnError(callback: (error: any) => void) {
     this.callbackOnError = callback;
@@ -17,6 +18,13 @@ export class WebsocketService {
     this.callbackOnMessage = callback;
   }
 
+  public send(data: object) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify(data));
+    } else {
+      this.outgoingMessagesQueue.push(data);
+    }
+  }
 
   connect(playerId: string) {
     const socketUrl = environment.apiUrl + "/ws?player_id=" + playerId;
@@ -24,6 +32,7 @@ export class WebsocketService {
       this.socket = new WebSocket(socketUrl);
       this.socket.onopen = () => {
         console.log("Connected to the websocket");
+        this.sendQueuedMessages();
       };
       this.socket.onerror = (error) => {
         this.handleError(error);
@@ -53,5 +62,12 @@ export class WebsocketService {
 
   private handleMessage(msgEvent: MessageEvent) {
     if (this.callbackOnMessage) this.callbackOnMessage(JSON.parse(msgEvent.data));
+  }
+
+  private sendQueuedMessages() {
+    this.outgoingMessagesQueue.forEach((msg) => {
+      this.send(msg);
+    });
+    this.outgoingMessagesQueue = [];
   }
 }
