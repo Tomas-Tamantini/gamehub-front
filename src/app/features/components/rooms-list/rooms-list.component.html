@@ -1,3 +1,7 @@
+@if(isLoading()){
+<app-cards-skeleton></app-cards-skeleton>
+}
+@else {
 @if(rooms().length > 0){
 <div class="cards-container">
     @for(room of rooms(); track room.roomId){
@@ -8,4 +12,5 @@
 @else {
 <!-- TODO: Design better looking blank slate component -->
 <p>No available game rooms</p>
+}
 }
