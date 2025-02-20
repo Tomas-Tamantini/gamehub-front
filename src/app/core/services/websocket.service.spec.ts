@@ -27,9 +27,36 @@ describe('WebsocketService', () => {
     expect(globalThis.WebSocket).toHaveBeenCalledWith(`${environment.apiUrl}/ws?player_id=Alice`);
   });
 
-  it('should send messages to the websocket', () => {
-    service.send({ key: "value" });
-    expect(mockWebSocket.send).toHaveBeenCalledWith('{"key":"value"}');
+  describe('send', () => {
+    it('should send messages to the websocket', () => {
+      service.send({ key: "value" });
+      expect(mockWebSocket.send).toHaveBeenCalledWith('{"key":"value"}');
+    });
+
+    it('should convert sent messages to snake case', () => {
+      service.send({ keyCamel: "value" });
+      expect(mockWebSocket.send).toHaveBeenCalledWith('{"key_camel":"value"}');
+    });
+  });
+
+  describe('receive', () => {
+    const messageCallback = jasmine.createSpy();
+
+    beforeEach(() => {
+      service.subscribeOnMessage(messageCallback);
+    });
+
+    it('should invoke message callback on message event', () => {
+      const message = new MessageEvent("message", { data: '{"key": "value"}' });
+      mockWebSocket.onmessage!(message);
+      expect(messageCallback).toHaveBeenCalledWith({ key: "value" });
+    })
+
+    it('should convert incoming messages to camel case', () => {
+      const message = new MessageEvent("message", { data: '{"key_snake": "value"}' });
+      mockWebSocket.onmessage!(message);
+      expect(messageCallback).toHaveBeenCalledWith({ keySnake: "value" });
+    });
   });
 
   it('should disconnect the websocket', () => {
@@ -43,13 +70,5 @@ describe('WebsocketService', () => {
     const error = new Event("error");
     mockWebSocket.onerror!(error);
     expect(errorCallback).toHaveBeenCalledWith(error);
-  })
-
-  it('should invoke message callback on message event', () => {
-    const messageCallback = jasmine.createSpy();
-    service.subscribeOnMessage(messageCallback);
-    const message = new MessageEvent("message", { data: '{"key": "value"}' });
-    mockWebSocket.onmessage!(message);
-    expect(messageCallback).toHaveBeenCalledWith({ key: "value" });
   })
 });

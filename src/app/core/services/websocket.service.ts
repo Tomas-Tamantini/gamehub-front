@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { camelToSnake, snakeToCamel } from '../utils/case-transform';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class WebsocketService {
 
   public send(data: object) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify(data));
+      this.socket.send(JSON.stringify(camelToSnake(data)));
     } else {
       this.outgoingMessagesQueue.push(data);
     }
@@ -61,7 +62,7 @@ export class WebsocketService {
   }
 
   private handleMessage(msgEvent: MessageEvent) {
-    if (this.callbackOnMessage) this.callbackOnMessage(JSON.parse(msgEvent.data));
+    if (this.callbackOnMessage) this.callbackOnMessage(snakeToCamel(JSON.parse(msgEvent.data)));
   }
 
   private sendQueuedMessages() {
