@@ -7,9 +7,12 @@ import { environment } from '../../../environments/environment';
 export class WebsocketService {
   private socket?: WebSocket;
 
-  connect() {
-    const socketUrl = environment.apiUrl + "/ws";
+  connect(playerId: string) {
+    const socketUrl = environment.apiUrl + "/ws?player_id=" + playerId;
     this.socket = new WebSocket(socketUrl);
+    this.socket.onopen = () => {
+      console.log("Connected to the websocket");
+    };
   }
 
   disconnect() {

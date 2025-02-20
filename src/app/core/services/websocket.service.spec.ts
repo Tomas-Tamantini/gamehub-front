@@ -11,10 +11,12 @@ describe('WebsocketService', () => {
     mockWebSocket = {
       onmessage: jasmine.createSpy(),
       send: jasmine.createSpy(),
+      close: jasmine.createSpy()
     } as any;
     globalThis.WebSocket = jasmine.createSpy().and.returnValue(mockWebSocket) as any;
     TestBed.configureTestingModule({});
     service = TestBed.inject(WebsocketService);
+    service.connect("Alice");
   });
 
   it('should be created', () => {
@@ -22,9 +24,7 @@ describe('WebsocketService', () => {
   });
 
   it('should connect to the websocket in the proper URL', () => {
-    service.connect();
-    const expectedEndpoint = `${environment.apiUrl}/ws`;
-    expect(globalThis.WebSocket).toHaveBeenCalledWith(expectedEndpoint);
+    expect(globalThis.WebSocket).toHaveBeenCalledWith(`${environment.apiUrl}/ws?player_id=Alice`);
   });
 
   it('should disconnect the websocket', () => {
