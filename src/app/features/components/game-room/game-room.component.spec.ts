@@ -4,6 +4,7 @@ import { GameRoomComponent } from './game-room.component';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
+import { ActivatedRoute } from '@angular/router';
 
 describe('GameRoomComponent', () => {
   let component: GameRoomComponent;
@@ -11,14 +12,23 @@ describe('GameRoomComponent', () => {
   let socketServiceSpy: jasmine.SpyObj<WebsocketService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let alertServiceSpy: jasmine.SpyObj<AlertService>;
+  let mockActivatedRoute: any;
 
   beforeEach(async () => {
+    mockActivatedRoute = {
+      snapshot: {
+        paramMap: { get: () => "123" },
+        queryParamMap: { get: jasmine.createSpy('get') }
+      }
+    }
+
     await TestBed.configureTestingModule({
       imports: [GameRoomComponent],
       providers: [
         {
           provide: WebsocketService, useValue: jasmine.createSpyObj('WebsocketService',
             [
+              'send',
               'connect',
               'disconnect',
               'subcribeOnError',
@@ -27,7 +37,8 @@ describe('GameRoomComponent', () => {
           )
         },
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
-        { provide: AlertService, useValue: jasmine.createSpyObj('AlertService', ['alertError']) }
+        { provide: AlertService, useValue: jasmine.createSpyObj('AlertService', ['alertError']) },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }
       ]
     })
       .compileComponents();
@@ -63,4 +74,30 @@ describe('GameRoomComponent', () => {
     socketServiceSpy.subcribeOnError.calls.mostRecent().args[0](error);
     expect(alertServiceSpy.alertError).toHaveBeenCalledWith("Could not connect to server");
   })
+
+  describe('initial request', () => {
+    it('should send join game request', () => {
+      mockActivatedRoute.snapshot.queryParamMap.get.and.returnValue('join');
+      component.ngOnInit();
+      expect(socketServiceSpy.send).toHaveBeenCalledWith({
+        requestType: 'JOIN_GAME_BY_ID',
+        payload: Object({ roomId: '123' })
+      });
+    });
+
+    it('should send rejoin game request', () => {
+      mockActivatedRoute.snapshot.queryParamMap.get.and.returnValue('rejoin');
+      component.ngOnInit();
+      expect(socketServiceSpy.send).toHaveBeenCalledWith({
+        requestType: 'REJOIN_GAME',
+        payload: Object({ roomId: '123' })
+      });
+    });
+
+    it('should alert on invalid action', () => {
+      mockActivatedRoute.snapshot.queryParamMap.get.and.returnValue('play');
+      component.ngOnInit();
+      expect(alertServiceSpy.alertError).toHaveBeenCalledWith("Invalid action: play");
+    });
+  });
 });
