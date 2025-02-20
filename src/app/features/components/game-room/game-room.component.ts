@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { AlertService } from '../../../core/services/alert.service';
 
 @Component({
   selector: 'app-game-room',
@@ -11,9 +12,13 @@ import { AuthService } from '../../../core/services/auth.service';
 export class GameRoomComponent implements OnInit, OnDestroy {
   private socketService = inject(WebsocketService)
   private authService = inject(AuthService);
+  private alertService = inject(AlertService);
 
   ngOnInit() {
     this.socketService.connect(this.authService.getPlayerId());
+    this.socketService.subcribeOnError((_) => {
+      this.alertService.alertError("Could not connect to server");
+    });
   }
 
   ngOnDestroy(): void {

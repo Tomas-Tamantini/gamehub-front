@@ -31,4 +31,12 @@ describe('WebsocketService', () => {
     service.disconnect();
     expect(mockWebSocket.close).toHaveBeenCalled();
   });
+
+  it('should invoke error callback on error', () => {
+    const errorCallback = jasmine.createSpy();
+    service.subcribeOnError(errorCallback);
+    const error = new Event("error");
+    mockWebSocket.onerror!(error);
+    expect(errorCallback).toHaveBeenCalledWith(error);
+  })
 });
