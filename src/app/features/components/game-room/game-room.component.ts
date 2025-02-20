@@ -22,22 +22,25 @@ export class GameRoomComponent implements OnInit, OnDestroy {
       this.alertService.alertError("Could not connect to server");
     });
     this.socketService.subscribeOnMessage(msg => console.log(msg));
+    this.sendInitialRequest();
+  }
+
+  private sendInitialRequest() {
     const roomId = this.route.snapshot.paramMap.get('id');
     const action = this.route.snapshot.queryParamMap.get('action');
-    if (action == 'join') {
-      this.socketService.send({
-        requestType: "JOIN_GAME_BY_ID",
-        payload: { roomId }
-      });
+    const requestTypeMap = {
+      'join': "JOIN_GAME_BY_ID",
+      'rejoin': "REJOIN_GAME"
     }
-    else if (action == 'rejoin') {
-      this.socketService.send({
-        requestType: "REJOIN_GAME",
-        payload: { roomId }
-      });
+    if (!action) {
+      this.alertService.alertError(`Invalid action`);
+    }
+    else if (!requestTypeMap.hasOwnProperty(action)) {
+      this.alertService.alertError(`Invalid action: ${action}`);
     }
     else {
-      this.alertService.alertError(`Invalid action: ${action}`);
+      const requestType = requestTypeMap[action as keyof typeof requestTypeMap];
+      this.socketService.send({ requestType, payload: { roomId } });
     }
   }
 
