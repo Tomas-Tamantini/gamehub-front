@@ -1,12 +1,7 @@
-import { Component, model } from '@angular/core';
+import { Component, inject, model, OnInit } from '@angular/core';
 import { RoomSummary } from './room-summary.model';
 import { RoomCardComponent } from './room-card/room-card.component';
-
-const mockRoomsData: RoomSummary[] = [
-  { roomId: 1, capacity: 4, playerIds: ["Alice", "Bob"], offlinePlayers: [], isFull: false },
-  { roomId: 2, capacity: 4, playerIds: ["Charlie", "David", "Esther", "Frida"], offlinePlayers: [], isFull: true },
-  { roomId: 3, capacity: 4, playerIds: ["Charlie", "David", "Esther", "Frida"], offlinePlayers: ["Frida"], isFull: true }
-]
+import { HttpService } from '../../../core/services/http.service';
 
 @Component({
   selector: 'app-rooms-list',
@@ -14,6 +9,14 @@ const mockRoomsData: RoomSummary[] = [
   templateUrl: './rooms-list.component.html',
   styleUrl: './rooms-list.component.scss'
 })
-export class RoomsListComponent {
-  rooms = model<RoomSummary[]>(mockRoomsData);
+export class RoomsListComponent implements OnInit {
+  rooms = model<RoomSummary[]>([]);
+  private readonly httpService = inject(HttpService);
+
+  ngOnInit() {
+    this.httpService.getGameRooms().subscribe({
+      next: rooms => this.rooms.set(rooms.items),
+      error: error => console.error('Failed to fetch game rooms', error)
+    });
+  }
 }
