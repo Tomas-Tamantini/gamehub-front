@@ -16,7 +16,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.socketService.connect(this.authService.getPlayerId());
-    this.socketService.subcribeOnError((_) => {
+    this.socketService.subcribeOnError(() => {
       this.alertService.alertError("Could not connect to server");
     });
   }
