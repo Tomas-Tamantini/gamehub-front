@@ -1,0 +1,26 @@
+<div class="card-container">
+    <mat-card class="waiting-card">
+        <mat-card-header>
+            <mat-card-title>
+                <span class="white-text">
+                    Waiting for <strong>{{ numOpenSeats() }}</strong> more player{{numOpenSeats() !== 1 ? 's': ''}} to
+                    join...
+                </span>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-list dense>
+                <h4 class="white-text">Players in room:</h4>
+                @for (player of room().playerIds; track player) {
+                <mat-list-item>
+                    {{ player }}
+                </mat-list-item>
+                }
+            </mat-list>
+
+            <div class="spinner-container">
+                <mat-progress-spinner color="accent" mode="indeterminate"></mat-progress-spinner>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -5,10 +5,11 @@ import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
 import { Message } from '../../../core/models/message.model';
 import { RoomSummary } from '../../../core/models/room-summary.model';
+import { LobbyComponent } from "./lobby/lobby.component";
 
 @Component({
   selector: 'app-game-room',
-  imports: [],
+  imports: [LobbyComponent],
   templateUrl: './game-room.component.html',
   styleUrl: './game-room.component.scss'
 })
@@ -17,10 +18,15 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
-  private roomSummary = signal<RoomSummary | null>(null);
+
+  roomSummary = signal<RoomSummary | null>(null);
 
   public gameHasStarted = computed(() => {
     return this.roomSummary()?.isFull ?? false;
+  });
+
+  public isInLobby = computed(() => {
+    return this.roomSummary() && !this.gameHasStarted();
   });
 
   ngOnInit() {

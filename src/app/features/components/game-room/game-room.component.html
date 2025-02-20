@@ -1,6 +1,10 @@
-@if(gameHasStarted()){
+@if(isInLobby()){
+<app-lobby [room]="roomSummary()!"></app-lobby>
+}
+@else if(gameHasStarted()) {
 <p>Game has started</p>
 }
 @else {
-<p>Game has not started</p>
+<!--TODO: Add better loading page-->
+<p>loading...</p>
 }
