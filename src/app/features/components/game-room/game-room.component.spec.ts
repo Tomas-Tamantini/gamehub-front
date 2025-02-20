@@ -21,7 +21,8 @@ describe('GameRoomComponent', () => {
             [
               'connect',
               'disconnect',
-              'subcribeOnError'
+              'subcribeOnError',
+              'subscribeOnMessage'
             ]
           )
         },

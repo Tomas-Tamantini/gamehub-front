@@ -32,11 +32,19 @@ describe('WebsocketService', () => {
     expect(mockWebSocket.close).toHaveBeenCalled();
   });
 
-  it('should invoke error callback on error', () => {
+  it('should invoke error callback on error event', () => {
     const errorCallback = jasmine.createSpy();
     service.subcribeOnError(errorCallback);
     const error = new Event("error");
     mockWebSocket.onerror!(error);
     expect(errorCallback).toHaveBeenCalledWith(error);
+  })
+
+  it('should invoke message callback on message event', () => {
+    const messageCallback = jasmine.createSpy();
+    service.subscribeOnMessage(messageCallback);
+    const message = new MessageEvent("message", { data: '{"key": "value"}' });
+    mockWebSocket.onmessage!(message);
+    expect(messageCallback).toHaveBeenCalledWith({ key: "value" });
   })
 });

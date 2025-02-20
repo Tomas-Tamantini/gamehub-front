@@ -7,10 +7,16 @@ import { environment } from '../../../environments/environment';
 export class WebsocketService {
   private socket?: WebSocket;
   private callbackOnError?: (error: any) => void;
+  private callbackOnMessage?: (message: any) => void;
 
   subcribeOnError(callback: (error: any) => void) {
     this.callbackOnError = callback;
   };
+
+  subscribeOnMessage(callback: (message: object) => void) {
+    this.callbackOnMessage = callback;
+  }
+
 
   connect(playerId: string) {
     const socketUrl = environment.apiUrl + "/ws?player_id=" + playerId;
@@ -21,6 +27,12 @@ export class WebsocketService {
       };
       this.socket.onerror = (error) => {
         this.handleError(error);
+      };
+      this.socket.onclose = () => {
+        console.log("Disconnected from the websocket");
+      };
+      this.socket.onmessage = (event) => {
+        this.handleMessage(event);
       };
     }
     catch (error) {
@@ -35,11 +47,11 @@ export class WebsocketService {
   }
 
   private handleError(error: any) {
-    if (this.callbackOnError) {
-      this.callbackOnError(error);
-    }
-    else {
-      console.error("Websocket error", error);
-    }
+    if (this.callbackOnError) this.callbackOnError(error);
+    else console.error("Websocket error", error);
+  }
+
+  private handleMessage(msgEvent: MessageEvent) {
+    if (this.callbackOnMessage) this.callbackOnMessage(JSON.parse(msgEvent.data));
   }
 }
