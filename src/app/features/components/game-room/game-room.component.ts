@@ -3,7 +3,7 @@ import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
-import { Message } from '../../../core/models/message.model';
+import { GameState, Message } from '../../../core/models/message.model';
 import { RoomSummary } from '../../../core/models/room-summary.model';
 import { LobbyComponent } from "./lobby/lobby.component";
 
@@ -20,6 +20,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
 
   roomSummary = signal<RoomSummary | null>(null);
+  gameState = signal<GameState | null>(null);
 
   public gameHasStarted = computed(() => {
     return this.roomSummary()?.isFull ?? false;
@@ -78,7 +79,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
         this.roomSummary.set(msg.payload);
         break;
       case "GAME_STATE":
-        console.log(msg.payload);
+        this.gameState.set(msg.payload);
         break;
     }
   }

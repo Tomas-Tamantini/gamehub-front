@@ -5,6 +5,8 @@ import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
+import { RoomSummary } from '../../../core/models/room-summary.model';
+import { GameState } from '../../../core/models/message.model';
 
 describe('GameRoomComponent', () => {
   let component: GameRoomComponent;
@@ -101,9 +103,43 @@ describe('GameRoomComponent', () => {
     });
   });
 
+  describe('computed state', () => {
+    it('should not be in lobby if roomSummary is null', () => {
+      expect(component.isInLobby()).toBeFalsy();
+    });
+
+    it('should not be in lobby if room is full', () => {
+      component.roomSummary.set({ isFull: true } as RoomSummary);
+      expect(component.isInLobby()).toBeFalse();
+    });
+
+    it('should be in lobby if room is not full', () => {
+      component.roomSummary.set({ isFull: false } as RoomSummary);
+      expect(component.isInLobby()).toBeTrue();
+    });
+
+    it('should start game when room is full', () => {
+      expect(component.gameHasStarted()).toBeFalse();
+      component.roomSummary.set({ isFull: true } as RoomSummary);
+      expect(component.gameHasStarted()).toBeTrue();
+    });
+  });
+
   describe('message handling', () => {
     beforeEach(() => {
       alertServiceSpy.alertError.calls.reset();
+    });
+
+    it('should update room summary on GAME_ROOM_UPDATE message', () => {
+      const mockSummary = { roomId: 123 } as RoomSummary;
+      component.handleMessage({ messageType: "GAME_ROOM_UPDATE", payload: mockSummary });
+      expect(component.roomSummary()).toEqual(mockSummary);
+    });
+
+    it('should update game state on GAME_STATE message', () => {
+      const mockState = { roomId: 123 } as GameState;
+      component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
+      expect(component.gameState()).toEqual(mockState);
     });
 
     it('should alert on error message', () => {
