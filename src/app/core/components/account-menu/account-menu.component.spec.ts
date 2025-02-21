@@ -2,30 +2,28 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountMenuComponent } from './account-menu.component';
 import { AuthService } from '../../services/auth.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { of } from 'rxjs';
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
+import { Router } from '@angular/router';
 
 describe('AccountMenuComponent', () => {
   let component: AccountMenuComponent;
   let fixture: ComponentFixture<AccountMenuComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let dialogSpy: jasmine.SpyObj<MatDialog>;
+  let navigateSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AccountMenuComponent],
       providers: [
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId', 'login', 'logout']) },
-        { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) }
       ]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(AccountMenuComponent);
+    const router = TestBed.inject(Router);
+    navigateSpy = spyOn(router, 'navigate');
     component = fixture.componentInstance;
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    dialogSpy = TestBed.inject(MatDialog) as jasmine.SpyObj<MatDialog>;
     fixture.detectChanges();
   });
 
@@ -38,26 +36,22 @@ describe('AccountMenuComponent', () => {
     expect(component.playerId()).toBe("Alice");
   });
 
-  it('should logout user on logout', () => {
-    component.logout();
-    expect(authServiceSpy.logout).toHaveBeenCalled();
+  describe('logout', () => {
+    beforeEach(() => { component.logout(); });
+
+    it('should logout user', () => {
+      expect(authServiceSpy.logout).toHaveBeenCalled();
+    });
+
+    it('should redirect to login page', () => {
+      expect(navigateSpy).toHaveBeenCalledWith(['/login']);
+    });
   });
 
   describe('login', () => {
-    beforeEach(() => {
-      dialogSpy.open.and.returnValue(
-        {
-          afterClosed: () => of('Alice')
-        } as MatDialogRef<LoginDialogComponent>);
+    it('should redirect to login page', () => {
       component.login();
-    });
-
-    it('should open login dialog', () => {
-      expect(dialogSpy.open).toHaveBeenCalled();
-    });
-
-    it('should login user after dialog close', () => {
-      expect(authServiceSpy.login).toHaveBeenCalledWith("Alice");
+      expect(navigateSpy).toHaveBeenCalledWith(['/login']);
     });
   });
 });

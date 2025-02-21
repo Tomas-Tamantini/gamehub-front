@@ -3,8 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../services/auth.service';
-import { MatDialog } from '@angular/material/dialog';
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-menu',
@@ -14,7 +13,7 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 })
 export class AccountMenuComponent {
   private readonly authService = inject(AuthService);
-  private readonly dialog = inject(MatDialog)
+  private readonly router = inject(Router);
 
   playerId(): string {
     return this.authService.getPlayerId();
@@ -22,14 +21,10 @@ export class AccountMenuComponent {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   login(): void {
-    const dialogRef = this.dialog.open(LoginDialogComponent, {});
-    dialogRef.afterClosed().subscribe(playerId => {
-      if (playerId) {
-        this.authService.login(playerId);
-      }
-    });
+    this.router.navigate(['/login']);
   }
 }
