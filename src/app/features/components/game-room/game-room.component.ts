@@ -6,10 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { GameState, Message } from '../../../core/models/message.model';
 import { RoomSummary } from '../../../core/models/room-summary.model';
 import { LobbyComponent } from "./lobby/lobby.component";
+import { GameComponent } from "./game/game.component";
 
 @Component({
   selector: 'app-game-room',
-  imports: [LobbyComponent],
+  imports: [LobbyComponent, GameComponent],
   templateUrl: './game-room.component.html',
   styleUrl: './game-room.component.scss'
 })

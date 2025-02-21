@@ -2,7 +2,7 @@
 <app-lobby [room]="roomSummary()!"></app-lobby>
 }
 @else if(gameHasStarted()) {
-<p>Game has started</p>
+<app-game [gameState]="gameState()!" [roomInfo]="roomSummary()!"></app-game>
 }
 @else {
 <!--TODO: Add better loading page-->
