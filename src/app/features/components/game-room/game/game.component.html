@@ -1,1 +1,3 @@
-<p>game works!</p>
+@for (player of players(); track player.playerId) {
+<app-player [player]="player"></app-player>
+}
