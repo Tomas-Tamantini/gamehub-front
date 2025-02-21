@@ -1,1 +1,21 @@
-<p>login works!</p>
+<div class="card-container">
+    <mat-card class="login-card">
+        <mat-card-header>
+            <mat-card-title>
+                <span class="white-text">
+                    Sign in to continue
+                </span>
+            </mat-card-title>
+        </mat-card-header>
+        <span class="vertical-spacer"></span>
+        <mat-card-content>
+            <mat-form-field>
+                <mat-label>Player ID</mat-label>
+                <input matInput [(ngModel)]="playerId" (keyup.enter)="onSubmit()" />
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-flat-button color="primary" (click)="onSubmit()">Sign in</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
