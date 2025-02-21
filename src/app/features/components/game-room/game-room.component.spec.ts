@@ -102,9 +102,22 @@ describe('GameRoomComponent', () => {
   });
 
   describe('message handling', () => {
+    beforeEach(() => {
+      alertServiceSpy.alertError.calls.reset();
+    });
+
     it('should alert on error message', () => {
       component.handleMessage({ messageType: "ERROR", payload: { error: 'error message' } });
       expect(alertServiceSpy.alertError).toHaveBeenCalledWith("error message");
+    });
+
+    it('should rejoin game if error message is "Player already in room"', () => {
+      component.handleMessage({ messageType: "ERROR", payload: { error: 'Player already in room' } });
+      expect(alertServiceSpy.alertError).not.toHaveBeenCalled();
+      expect(socketServiceSpy.send).toHaveBeenCalledWith({
+        requestType: 'REJOIN_GAME',
+        payload: Object({ roomId: '123' })
+      });
     });
   });
 });

@@ -29,18 +29,24 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     return this.roomSummary() && !this.gameHasStarted();
   });
 
+  private roomId() {
+    return this.route.snapshot.paramMap.get('id');
+  }
+
+  private action() {
+    return this.route.snapshot.queryParamMap.get('action');
+  }
+
   ngOnInit() {
     this.socketService.connect(this.authService.getPlayerId());
     this.socketService.subcribeOnError(() => {
       this.alertService.alertError("Could not connect to server");
     });
     this.socketService.subscribeOnMessage(msg => this.handleMessage(msg as Message));
-    this.sendInitialRequest();
+    this.sendInitialRequest(this.action());
   }
 
-  private sendInitialRequest() {
-    const roomId = this.route.snapshot.paramMap.get('id');
-    const action = this.route.snapshot.queryParamMap.get('action');
+  private sendInitialRequest(action: string | null) {
     const requestTypeMap = {
       join: "JOIN_GAME_BY_ID",
       rejoin: "REJOIN_GAME"
@@ -50,7 +56,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     }
     else {
       const requestType = requestTypeMap[action as keyof typeof requestTypeMap];
-      this.socketService.send({ requestType, payload: { roomId } });
+      this.socketService.send({ requestType, payload: { roomId: this.roomId() } });
     }
   }
 
@@ -61,7 +67,12 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   handleMessage(msg: Message) {
     switch (msg.messageType) {
       case "ERROR":
-        this.alertService.alertError(msg.payload.error);
+        if (msg.payload.error === "Player already in room") {
+          this.sendInitialRequest("rejoin");
+        }
+        else {
+          this.alertService.alertError(msg.payload.error);
+        }
         break;
       case "GAME_ROOM_UPDATE":
         this.roomSummary.set(msg.payload);
