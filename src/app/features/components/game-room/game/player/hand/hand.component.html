@@ -1,8 +1,14 @@
 @if(cards() === undefined){
-<div class="hidden-card">
+<div class="card hidden">
     {{numCards()}}
 </div>
 }
 @else {
-<p>Display private cards here...</p>
+<div class="cards-container">
+    @for (card of cards(); track $index) {
+    <div class="card private">
+        {{card.rank}}{{card.suit}}
+    </div>
+    }
+</div>
 }
