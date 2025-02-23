@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { Card } from '../../../../../../core/models/card.model';
 
 @Component({
   selector: 'app-hand',
@@ -8,4 +9,5 @@ import { Component, input } from '@angular/core';
 })
 export class HandComponent {
   numCards = input.required<number>();
+  cards = input.required<Card[] | undefined>();
 }

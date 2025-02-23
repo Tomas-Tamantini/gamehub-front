@@ -18,6 +18,7 @@ describe('HandComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     componentRef.setInput('numCards', 5);
+    componentRef.setInput('cards', undefined);
     fixture.detectChanges();
   });
 

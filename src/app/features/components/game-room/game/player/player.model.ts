@@ -1,3 +1,5 @@
+import { Card } from "../../../../../core/models/card.model";
+
 export interface Player {
     playerId: string;
     angleAroundTableDegrees: number;
@@ -6,4 +8,5 @@ export interface Player {
     isOffline: boolean;
     isTheirTurn: boolean;
     numCards: number;
+    cards?: Card[];
 }

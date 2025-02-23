@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameComponent } from './game.component';
 import { ComponentRef } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
-import { Player } from './player/player.model';
+import { Card } from '../../../../core/models/card.model';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -97,6 +97,15 @@ describe('GameComponent', () => {
       const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
       expect(computedAngles).toEqual([0, 270, 180, 90]);
+    });
+
+    it('should map players private cards', () => {
+      authServiceSpy.getPlayerId.and.returnValue("Bob");
+      const cards: Card[] = [{ rank: 'A', suit: 'd' }]
+      componentRef.setInput('privateGameState', { cards });
+      const computed = component.players();
+      const computedPrivateCards = computed.map(player => player.cards);
+      expect(computedPrivateCards).toEqual([undefined, cards, undefined, undefined]);
     });
   });
 });
