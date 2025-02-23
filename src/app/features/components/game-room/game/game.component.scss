@@ -1,13 +1,17 @@
+$table-height: 450px;
+$table-width: 600px;
+
 .game-area {
-    padding: 50px;
+    padding: 100px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-width: calc($table-width + 70px);
 
     .game-table {
         position: relative;
-        width: 500px;
-        height: 500px;
+        width: $table-width;
+        height: $table-height;
         border-radius: 50%;
         background-color: darkgreen;
 

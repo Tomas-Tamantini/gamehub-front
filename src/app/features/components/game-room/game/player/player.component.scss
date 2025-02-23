@@ -5,6 +5,14 @@ $points-color: #f39c12;
 $money-color: #2ecc71;
 $red-color: #e74c3c;
 
+.badge-hand-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
 .player-badge {
     display: flex;
     flex-direction: column;

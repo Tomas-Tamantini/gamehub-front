@@ -1,16 +1,18 @@
 <div class="player-private">
-    <div class="player-badge">
-        <span class="player-id" [class.offline]="player().isOffline">
-            {{player().playerId}}
-        </span>
-        <div class="partial-results-container">
-            <span class="num-points">
-                {{player().numPoints}} pts
+    <div class="badge-hand-container">
+        <div class="player-badge">
+            <span class="player-id" [class.offline]="player().isOffline">
+                {{player().playerId}}
             </span>
-            <span class="money-amt" [class.negative]="player().partialResult < 0">
-                {{ player().partialResult | money}}
-            </span>
+            <div class="partial-results-container">
+                <span class="num-points">
+                    {{player().numPoints}} pts
+                </span>
+                <span class="money-amt" [class.negative]="player().partialResult < 0">
+                    {{ player().partialResult | money}}
+                </span>
+            </div>
         </div>
+        <app-hand [numCards]="player().numCards"></app-hand>
     </div>
-    <app-hand [numCards]="player().numCards"></app-hand>
 </div>
