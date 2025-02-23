@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { Card } from '../../../../../../core/models/card.model';
+import { SuitPipe } from '../../../../../../core/pipes/suit.pipe';
 
 @Component({
   selector: 'app-hand',
-  imports: [],
+  imports: [SuitPipe],
   templateUrl: './hand.component.html',
   styleUrl: './hand.component.scss'
 })
