@@ -106,8 +106,14 @@ describe('GameRoomComponent', () => {
   });
 
   describe('computed state', () => {
+    beforeEach(() => {
+      const sharedView = { status: "START_GAME" } as SharedGameState;
+      const mockState = { roomId: 123, sharedView } as GameState;
+      component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
+    });
+
     it('should not be in lobby if roomSummary is null', () => {
-      expect(component.isInLobby()).toBeFalsy();
+      expect(component.isInLobby()).toBeFalse();
     });
 
     it('should not be in lobby if room is full', () => {

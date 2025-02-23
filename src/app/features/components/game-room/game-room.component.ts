@@ -27,11 +27,11 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   privateGameState = signal<PrivateView | null>(null);
 
   public gameHasStarted = computed(() => {
-    return this.roomSummary()?.isFull ?? false;
+    return !!(this.roomSummary()?.isFull && this.sharedGameState())
   });
 
   public isInLobby = computed(() => {
-    return this.roomSummary() && !this.gameHasStarted();
+    return !!this.roomSummary() && !this.gameHasStarted();
   });
 
   private roomId() {
