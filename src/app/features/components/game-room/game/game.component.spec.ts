@@ -40,10 +40,10 @@ describe('GameComponent', () => {
     beforeEach(() => {
       componentRef.setInput('sharedGameState', {
         players: [
-          { playerId: "Bob", numPoints: 2 },
-          { playerId: "Charlie", numPoints: 3 },
-          { playerId: "Diana", numPoints: 4 },
-          { playerId: "Alice", numPoints: 1 },
+          { playerId: "Bob", numPoints: 2, numCards: 6 },
+          { playerId: "Charlie", numPoints: 3, numCards: 9 },
+          { playerId: "Diana", numPoints: 4, numCards: 12 },
+          { playerId: "Alice", numPoints: 1, numCards: 3 },
         ]
       });
     });
@@ -58,6 +58,12 @@ describe('GameComponent', () => {
       const computed = component.players();
       const computedPoints = computed.map(player => player.numPoints);
       expect(computedPoints).toEqual([1, 2, 3, 4]);
+    });
+
+    it('should map players num. cards', () => {
+      const computed = component.players();
+      const computedNumCards = computed.map(player => player.numCards);
+      expect(computedNumCards).toEqual([3, 6, 9, 12]);
     });
 
     it('should calculate players partial results', () => {

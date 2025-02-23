@@ -32,9 +32,10 @@ export class GameComponent {
       const numPoints = this.sharedGameState().players.find(player => player.playerId === playerId)?.numPoints ?? 0;
       const offset = (index - currentPlayerIdx + 4) % 4;
       const angleAroundTableDegrees = GameComponent.playerAngle(offset, numPlayers);
+      const numCards = this.sharedGameState().players.find(player => player.playerId === playerId)?.numCards ?? 0;
       const partialResult = avgNumPoints - numPoints;
       const isOffline = this.roomInfo().offlinePlayers.includes(playerId);
-      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline }
+      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline, numCards }
     });
   });
 
