@@ -6,7 +6,8 @@
 @else {
 <div class="cards-container">
     @for (card of cards(); track $index) {
-    <div class="card private">
+    <div class="card private" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
+        [class.black-suit]="card.suit === 'c' || card.suit === 's'">
         {{card.rank}}{{card.suit}}
     </div>
     }
