@@ -1,3 +1,9 @@
-@for (player of players(); track player.playerId) {
-<app-player [player]="player"></app-player>
-}
+<div class="game-area">
+    <div class="game-table">
+        @for (player of players(); track player.playerId) {
+        <div class="player-container" [style]="positionStyle(player.angleAroundTableDegrees)">
+            <app-player [player]="player"></app-player>
+        </div>
+        }
+    </div>
+</div>

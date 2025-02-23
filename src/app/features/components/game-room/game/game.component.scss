@@ -1,0 +1,19 @@
+.game-area {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .game-table {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background-color: darkgreen;
+
+        .player-container {
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+    }
+}

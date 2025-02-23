@@ -18,7 +18,7 @@ export class GameComponent {
 
   private static playerAngle(offset: number, numPlayers: number): number {
     const angle = 90 * (7 * numPlayers - 4 * offset) / numPlayers
-    return Math.floor(angle) % 360;
+    return angle % 360;
   }
 
   players = computed<Player[]>(() => {
@@ -30,4 +30,13 @@ export class GameComponent {
       return { playerId, angleAroundTableDegrees }
     });
   });
+
+  positionStyle(angleAroundTableDegrees: number) {
+    const angle = (angleAroundTableDegrees / 180) * Math.PI;
+
+    const x = Math.floor(50 * Math.cos(angle) + 50)
+    const y = Math.floor(-50 * Math.sin(angle) + 50)
+
+    return `top: ${y}%; left: ${x}%;`;
+  }
 }
