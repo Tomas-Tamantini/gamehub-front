@@ -6,8 +6,13 @@
         <span class="num-points">
             {{player().numPoints}} pts
         </span>
-        <span class="money-amt">
-            ${{player().partialResult}}
-        </span>
+        <span class="money-amt" [class.negative]="player().partialResult < 0">
+            <!--TODO: Make into a pipe-->
+            @if(player().partialResult > 0){
+            +${{player().partialResult}}
+            }
+            @else if (player().partialResult < 0) { -${{-player().partialResult}} } @else {${{-player().partialResult}}
+                } </span>
+
     </div>
 </div>
