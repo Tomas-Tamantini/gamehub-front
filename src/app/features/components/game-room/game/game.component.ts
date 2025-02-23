@@ -27,9 +27,10 @@ export class GameComponent {
     const numPlayers = this.roomInfo().playerIds.length;
     const currentPlayerIdx = this.authService.getPlayerId() ? this.roomInfo().playerIds.indexOf(this.authService.getPlayerId()) : 0;
     return this.roomInfo().playerIds.map((playerId, index) => {
+      const numPoints = this.sharedGameState().players.find(player => player.playerId === playerId)?.numPoints ?? 0;
       const offset = (index - currentPlayerIdx + 4) % 4;
       const angleAroundTableDegrees = GameComponent.playerAngle(offset, numPlayers);
-      return { playerId, angleAroundTableDegrees }
+      return { playerId, angleAroundTableDegrees, numPoints }
     });
   });
 

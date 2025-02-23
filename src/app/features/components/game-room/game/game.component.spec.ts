@@ -23,7 +23,8 @@ describe('GameComponent', () => {
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    componentRef.setInput('gameState', {});
+    componentRef.setInput('sharedGameState', {});
+    componentRef.setInput('privateGameState', null);
     componentRef.setInput('roomInfo', { playerIds: [] });
     fixture.detectChanges();
   });
@@ -34,12 +35,29 @@ describe('GameComponent', () => {
 
   describe('computed players', () => {
     const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
+    beforeEach(() => {
+      componentRef.setInput('sharedGameState', {
+        players: [
+          { playerId: "Bob", numPoints: 2 },
+          { playerId: "Charlie", numPoints: 3 },
+          { playerId: "Diana", numPoints: 4 },
+          { playerId: "Alice", numPoints: 1 },
+        ]
+      });
+    });
 
     it('should map player Ids', () => {
       componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedIds = computed.map(player => player.playerId);
       expect(computedIds).toEqual(playerIds);
+    });
+
+    it('should map players num. points', () => {
+      componentRef.setInput('roomInfo', { playerIds });
+      const computed = component.players();
+      const computedPoints = computed.map(player => player.numPoints);
+      expect(computedPoints).toEqual([1, 2, 3, 4]);
     });
 
     it('should seat players clockwise', () => {
