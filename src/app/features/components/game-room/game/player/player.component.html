@@ -1,5 +1,5 @@
 <div class="player-badge">
-    <span class="player-id">
+    <span class="player-id" [class.offline]="player().isOffline">
         {{player().playerId}}
     </span>
     <div class="partial-results-container">

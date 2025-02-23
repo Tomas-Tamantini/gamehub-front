@@ -24,6 +24,11 @@ $money-color: #2ecc71;
         margin-bottom: 4px;
     }
 
+    .offline {
+        color: red;
+        text-decoration: line-through;
+    }
+
     .partial-results-container {
         display: flex;
         flex-direction: column;

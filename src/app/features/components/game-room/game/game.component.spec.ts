@@ -25,7 +25,10 @@ describe('GameComponent', () => {
     componentRef = fixture.componentRef;
     componentRef.setInput('sharedGameState', { players: [] });
     componentRef.setInput('privateGameState', null);
-    componentRef.setInput('roomInfo', { playerIds: [] });
+    componentRef.setInput('roomInfo', {
+      playerIds: ["Alice", "Bob", "Charlie", "Diana"],
+      offlinePlayers: ['Charlie']
+    });
     fixture.detectChanges();
   });
 
@@ -34,7 +37,6 @@ describe('GameComponent', () => {
   });
 
   describe('computed players', () => {
-    const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
     beforeEach(() => {
       componentRef.setInput('sharedGameState', {
         players: [
@@ -47,28 +49,30 @@ describe('GameComponent', () => {
     });
 
     it('should map player Ids', () => {
-      componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedIds = computed.map(player => player.playerId);
-      expect(computedIds).toEqual(playerIds);
+      expect(computedIds).toEqual(["Alice", "Bob", "Charlie", "Diana"]);
     });
 
     it('should map players num. points', () => {
-      componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedPoints = computed.map(player => player.numPoints);
       expect(computedPoints).toEqual([1, 2, 3, 4]);
     });
 
     it('should calculate players partial results', () => {
-      componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
-      const computedPoints = computed.map(player => player.partialResult);
-      expect(computedPoints).toEqual([1.5, 0.5, -0.5, -1.5]);
+      const computedResults = computed.map(player => player.partialResult);
+      expect(computedResults).toEqual([1.5, 0.5, -0.5, -1.5]);
+    });
+
+    it('should indicate offline players', () => {
+      const computed = component.players();
+      const computedOffline = computed.map(player => player.isOffline);
+      expect(computedOffline).toEqual([false, false, true, false]);
     });
 
     it('should seat players clockwise', () => {
-      componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
       expect(computedAngles).toEqual([270, 180, 90, 0]);
@@ -76,7 +80,6 @@ describe('GameComponent', () => {
 
     it('should place player at bottom of the table if they are logged in', () => {
       authServiceSpy.getPlayerId.and.returnValue("Bob");
-      componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
       expect(computedAngles).toEqual([0, 270, 180, 90]);

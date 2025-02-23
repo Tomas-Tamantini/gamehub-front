@@ -3,4 +3,5 @@ export interface Player {
     angleAroundTableDegrees: number;
     numPoints: number;
     partialResult: number;
+    isOffline: boolean;
 }

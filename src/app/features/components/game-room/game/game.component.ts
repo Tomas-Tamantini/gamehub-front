@@ -33,7 +33,8 @@ export class GameComponent {
       const offset = (index - currentPlayerIdx + 4) % 4;
       const angleAroundTableDegrees = GameComponent.playerAngle(offset, numPlayers);
       const partialResult = avgNumPoints - numPoints;
-      return { playerId, angleAroundTableDegrees, numPoints, partialResult }
+      const isOffline = this.roomInfo().offlinePlayers.includes(playerId);
+      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline }
     });
   });
 
