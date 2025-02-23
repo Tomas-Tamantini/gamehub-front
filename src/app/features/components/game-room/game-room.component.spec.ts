@@ -7,6 +7,8 @@ import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
 import { RoomSummary } from '../../../core/models/room-summary.model';
 import { GameState } from '../../../core/models/message.model';
+import { SharedGameState } from '../../../core/models/shared-view.model';
+import { PrivateView } from '../../../core/models/private-view.model';
 
 describe('GameRoomComponent', () => {
   let component: GameRoomComponent;
@@ -136,10 +138,18 @@ describe('GameRoomComponent', () => {
       expect(component.roomSummary()).toEqual(mockSummary);
     });
 
-    it('should update game state on GAME_STATE message', () => {
-      const mockState = { roomId: 123 } as GameState;
+    it('should update shared game state on GAME_STATE message', () => {
+      const sharedView = { status: "START_GAME" } as SharedGameState;
+      const mockState = { roomId: 123, sharedView } as GameState;
       component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
-      expect(component.gameState()).toEqual(mockState);
+      expect(component.sharedGameState()).toEqual(sharedView);
+    });
+
+    it('should update private game state on GAME_STATE message', () => {
+      const privateView = { status: "START_GAME" } as PrivateView;
+      const mockState = { roomId: 123, privateView } as GameState;
+      component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
+      expect(component.privateGameState()).toEqual(privateView);
     });
 
     it('should alert on error message', () => {

@@ -1,9 +1,10 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { GameState } from '../../../../core/models/message.model';
 import { RoomSummary } from '../../../../core/models/room-summary.model';
 import { Player } from './player/player.model';
 import { PlayerComponent } from "./player/player.component";
 import { AuthService } from '../../../../core/services/auth.service';
+import { SharedGameState } from '../../../../core/models/shared-view.model';
+import { PrivateView } from '../../../../core/models/private-view.model';
 
 @Component({
   selector: 'app-game',
@@ -12,7 +13,8 @@ import { AuthService } from '../../../../core/services/auth.service';
   styleUrl: './game.component.scss'
 })
 export class GameComponent {
-  gameState = input.required<GameState>();
+  sharedGameState = input.required<SharedGameState>();
+  privateGameState = input.required<PrivateView | null>();
   roomInfo = input.required<RoomSummary>();
   authService = inject(AuthService);
 

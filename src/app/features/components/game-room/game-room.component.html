@@ -2,7 +2,8 @@
 <app-lobby [room]="roomSummary()!"></app-lobby>
 }
 @else if(gameHasStarted()) {
-<app-game [gameState]="gameState()!" [roomInfo]="roomSummary()!"></app-game>
+<app-game [sharedGameState]="sharedGameState()!" [privateGameState]="privateGameState()"
+    [roomInfo]="roomSummary()!"></app-game>
 }
 @else {
 <!--TODO: Add better loading page-->

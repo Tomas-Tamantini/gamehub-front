@@ -3,10 +3,12 @@ import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
-import { GameState, Message } from '../../../core/models/message.model';
+import { Message } from '../../../core/models/message.model';
 import { RoomSummary } from '../../../core/models/room-summary.model';
 import { LobbyComponent } from "./lobby/lobby.component";
 import { GameComponent } from "./game/game.component";
+import { SharedGameState } from '../../../core/models/shared-view.model';
+import { PrivateView } from '../../../core/models/private-view.model';
 
 @Component({
   selector: 'app-game-room',
@@ -21,7 +23,8 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
 
   roomSummary = signal<RoomSummary | null>(null);
-  gameState = signal<GameState | null>(null);
+  sharedGameState = signal<SharedGameState | null>(null);
+  privateGameState = signal<PrivateView | null>(null);
 
   public gameHasStarted = computed(() => {
     return this.roomSummary()?.isFull ?? false;
@@ -80,7 +83,12 @@ export class GameRoomComponent implements OnInit, OnDestroy {
         this.roomSummary.set(msg.payload);
         break;
       case "GAME_STATE":
-        this.gameState.set(msg.payload);
+        if (msg.payload.sharedView) {
+          this.sharedGameState.set(msg.payload.sharedView);
+        }
+        if (msg.payload.privateView) {
+          this.privateGameState.set(msg.payload.privateView);
+        }
         break;
     }
   }
