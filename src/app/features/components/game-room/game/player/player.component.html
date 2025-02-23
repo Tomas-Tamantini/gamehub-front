@@ -1,6 +1,6 @@
 <div class="player-private">
     <div class="badge-hand-container">
-        <div class="player-badge">
+        <div class="player-badge" [class.is-their-turn]="player().isTheirTurn">
             <span class="player-id" [class.offline]="player().isOffline">
                 {{player().playerId}}
             </span>

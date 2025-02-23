@@ -4,5 +4,6 @@ export interface Player {
     numPoints: number;
     partialResult: number;
     isOffline: boolean;
+    isTheirTurn: boolean;
     numCards: number;
 }

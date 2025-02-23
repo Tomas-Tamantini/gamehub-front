@@ -39,6 +39,25 @@ $red-color: #e74c3c;
         }
     }
 
+    &.is-their-turn {
+        animation: pulse 0.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            border-color: $gold;
+        }
+
+        50% {
+            border-color: #f0d053;
+            box-shadow: 0 2px 8px #f0d053
+        }
+
+        100% {
+            border-color: $gold;
+        }
+    }
+
     .partial-results-container {
         display: flex;
         flex-direction: row;

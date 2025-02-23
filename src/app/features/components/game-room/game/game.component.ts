@@ -35,7 +35,8 @@ export class GameComponent {
       const numCards = this.sharedGameState().players.find(player => player.playerId === playerId)?.numCards ?? 0;
       const partialResult = avgNumPoints - numPoints;
       const isOffline = this.roomInfo().offlinePlayers.includes(playerId);
-      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline, numCards }
+      const isTheirTurn = playerId === this.sharedGameState().currentPlayerId;
+      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline, numCards, isTheirTurn };
     });
   });
 
