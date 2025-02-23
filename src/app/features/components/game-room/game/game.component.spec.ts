@@ -23,7 +23,7 @@ describe('GameComponent', () => {
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    componentRef.setInput('sharedGameState', {});
+    componentRef.setInput('sharedGameState', { players: [] });
     componentRef.setInput('privateGameState', null);
     componentRef.setInput('roomInfo', { playerIds: [] });
     fixture.detectChanges();
@@ -58,6 +58,13 @@ describe('GameComponent', () => {
       const computed = component.players();
       const computedPoints = computed.map(player => player.numPoints);
       expect(computedPoints).toEqual([1, 2, 3, 4]);
+    });
+
+    it('should calculate players partial results', () => {
+      componentRef.setInput('roomInfo', { playerIds });
+      const computed = component.players();
+      const computedPoints = computed.map(player => player.partialResult);
+      expect(computedPoints).toEqual([1.5, 0.5, -0.5, -1.5]);
     });
 
     it('should seat players clockwise', () => {

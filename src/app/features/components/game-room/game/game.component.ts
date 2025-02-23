@@ -26,11 +26,14 @@ export class GameComponent {
   players = computed<Player[]>(() => {
     const numPlayers = this.roomInfo().playerIds.length;
     const currentPlayerIdx = this.authService.getPlayerId() ? this.roomInfo().playerIds.indexOf(this.authService.getPlayerId()) : 0;
+    const totalNumPoints = this.sharedGameState().players.reduce((acc, player) => acc + player.numPoints, 0);
+    const avgNumPoints = totalNumPoints / numPlayers;
     return this.roomInfo().playerIds.map((playerId, index) => {
       const numPoints = this.sharedGameState().players.find(player => player.playerId === playerId)?.numPoints ?? 0;
       const offset = (index - currentPlayerIdx + 4) % 4;
       const angleAroundTableDegrees = GameComponent.playerAngle(offset, numPlayers);
-      return { playerId, angleAroundTableDegrees, numPoints }
+      const partialResult = avgNumPoints - numPoints;
+      return { playerId, angleAroundTableDegrees, numPoints, partialResult }
     });
   });
 
