@@ -1,0 +1,40 @@
+$gold: gold;
+$dark-bg: rgba(0, 0, 0, 0.7);
+$shadow-color: rgba(0, 0, 0, 0.5);
+$points-color: #f39c12;
+$money-color: #2ecc71;
+
+.player-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: $dark-bg;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 2px solid $gold;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    min-width: 60px;
+    box-shadow: 0 2px 8px $shadow-color;
+
+    .player-id {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .partial-results-container {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.85rem;
+
+        .num-points {
+            color: $points-color;
+        }
+
+        .money-amt {
+            color: $money-color;
+        }
+    }
+}
