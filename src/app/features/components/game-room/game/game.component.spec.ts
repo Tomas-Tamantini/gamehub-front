@@ -38,8 +38,6 @@ describe('GameComponent', () => {
   });
 
   describe('computed players', () => {
-    var computed: Player[];
-
     beforeEach(() => {
       componentRef.setInput('sharedGameState', {
         players: [
@@ -50,48 +48,53 @@ describe('GameComponent', () => {
         ],
         currentPlayerId: "Bob",
       });
-      computed = component.players();
     });
 
     it('should map player Ids', () => {
+      const computed = component.players();
       const computedIds = computed.map(player => player.playerId);
       expect(computedIds).toEqual(["Alice", "Bob", "Charlie", "Diana"]);
     });
 
     it('should map players num. points', () => {
+      const computed = component.players();
       const computedPoints = computed.map(player => player.numPoints);
       expect(computedPoints).toEqual([1, 2, 3, 4]);
     });
 
     it('should map players num. cards', () => {
+      const computed = component.players();
       const computedNumCards = computed.map(player => player.numCards);
       expect(computedNumCards).toEqual([3, 6, 9, 12]);
     });
 
     it('should calculate players partial results', () => {
+      const computed = component.players();
       const computedResults = computed.map(player => player.partialResult);
       expect(computedResults).toEqual([1.5, 0.5, -0.5, -1.5]);
     });
 
     it('should indicate offline players', () => {
+      const computed = component.players();
       const computedOffline = computed.map(player => player.isOffline);
       expect(computedOffline).toEqual([false, false, true, false]);
     });
 
     it('should indicate whose turn it is', () => {
+      const computed = component.players();
       const computedOffline = computed.map(player => player.isTheirTurn);
       expect(computedOffline).toEqual([false, true, false, false]);
     });
 
     it('should seat players clockwise', () => {
+      const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
       expect(computedAngles).toEqual([270, 180, 90, 0]);
     });
 
-    xit('should place player at bottom of the table if they are logged in', () => {
-      // TODO: Investigate why it's breaking
+    it('should place player at bottom of the table if they are logged in', () => {
       authServiceSpy.getPlayerId.and.returnValue("Bob");
-      computed = component.players();
+      const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
       expect(computedAngles).toEqual([0, 270, 180, 90]);
     });
