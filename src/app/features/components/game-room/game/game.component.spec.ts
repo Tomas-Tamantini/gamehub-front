@@ -26,8 +26,21 @@ describe('GameComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should generate list of players', () => {
-    componentRef.setInput('roomInfo', { playerIds: ["Alice", "Bob"] });
-    expect(component.players()).toEqual([{ playerId: "Alice" }, { playerId: "Bob" }]);
+  describe('computed players', () => {
+    it('should map player Ids', () => {
+      const playerIds = ["Alice", "Bob"];
+      componentRef.setInput('roomInfo', { playerIds });
+      const computed = component.players();
+      const computedIds = computed.map(player => player.playerId);
+      expect(computedIds).toEqual(playerIds);
+    });
+
+    it('should set the angle around the table for each player', () => {
+      const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
+      componentRef.setInput('roomInfo', { playerIds });
+      const computed = component.players();
+      const computedAngles = computed.map(player => player.angleAroundTableDegrees);
+      expect(computedAngles).toEqual([0, 90, 180, 270]);
+    });
   });
 });

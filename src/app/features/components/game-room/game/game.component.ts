@@ -15,8 +15,9 @@ export class GameComponent {
   roomInfo = input.required<RoomSummary>();
 
   players = computed<Player[]>(() => {
-    return this.roomInfo().playerIds.map(playerId => {
-      return { playerId }
+    return this.roomInfo().playerIds.map((playerId, index) => {
+      const angleAroundTableDegrees = index * 90;
+      return { playerId, angleAroundTableDegrees }
     });
   });
 }
