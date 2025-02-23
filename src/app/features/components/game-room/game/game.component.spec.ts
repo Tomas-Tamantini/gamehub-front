@@ -2,19 +2,25 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GameComponent } from './game.component';
 import { ComponentRef } from '@angular/core';
+import { AuthService } from '../../../../core/services/auth.service';
 
 describe('GameComponent', () => {
   let component: GameComponent;
   let componentRef: ComponentRef<GameComponent>;
   let fixture: ComponentFixture<GameComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameComponent]
+      imports: [GameComponent],
+      providers: [
+        { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
+      ]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(GameComponent);
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     componentRef.setInput('gameState', {});
@@ -35,12 +41,21 @@ describe('GameComponent', () => {
       expect(computedIds).toEqual(playerIds);
     });
 
-    it('should set the angle around the table for each player', () => {
+    it('should seat players clockwise', () => {
       const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
       componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
-      expect(computedAngles).toEqual([0, 90, 180, 270]);
+      expect(computedAngles).toEqual([270, 180, 90, 0]);
+    });
+
+    it('should place player at bottom of the table if they are logged in', () => {
+      authServiceSpy.getPlayerId.and.returnValue("Bob");
+      const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
+      componentRef.setInput('roomInfo', { playerIds });
+      const computed = component.players();
+      const computedAngles = computed.map(player => player.angleAroundTableDegrees);
+      expect(computedAngles).toEqual([0, 270, 180, 90]);
     });
   });
 });
