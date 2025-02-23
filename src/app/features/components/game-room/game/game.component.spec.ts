@@ -33,8 +33,9 @@ describe('GameComponent', () => {
   });
 
   describe('computed players', () => {
+    const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
+
     it('should map player Ids', () => {
-      const playerIds = ["Alice", "Bob"];
       componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedIds = computed.map(player => player.playerId);
@@ -42,7 +43,6 @@ describe('GameComponent', () => {
     });
 
     it('should seat players clockwise', () => {
-      const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
       componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
@@ -51,7 +51,6 @@ describe('GameComponent', () => {
 
     it('should place player at bottom of the table if they are logged in', () => {
       authServiceSpy.getPlayerId.and.returnValue("Bob");
-      const playerIds = ["Alice", "Bob", "Charlie", "Diana"];
       componentRef.setInput('roomInfo', { playerIds });
       const computed = component.players();
       const computedAngles = computed.map(player => player.angleAroundTableDegrees);
