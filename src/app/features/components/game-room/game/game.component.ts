@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { RoomSummary } from '../../../../core/models/room-summary.model';
-import { Player } from './player/player.model';
+import Hand, { Player } from './player/player.model';
 import { PlayerComponent } from "./player/player.component";
 import { AuthService } from '../../../../core/services/auth.service';
 import { SharedGameState } from '../../../../core/models/shared-view.model';
@@ -40,12 +40,31 @@ export class GameComponent {
     return angle % 360;
   }
 
+  private handHistories(): Map<string, Hand[]> {
+    var idxHandToBeat = -1;
+    for (let i = this.sharedGameState().moveHistory.length - 1; i >= 0; i--) {
+      if (this.sharedGameState().moveHistory[i].cards.length > 0) {
+        idxHandToBeat = i;
+        break;
+      }
+    }
+    const histories: Map<string, Hand[]> = new Map();
+    this.sharedGameState().moveHistory.forEach((move, idx) => {
+      if (!histories.has(move.playerId)) {
+        histories.set(move.playerId, [])
+      }
+      histories.get(move.playerId)!.push({ cards: move.cards, isHandToBeat: idx === idxHandToBeat });
+    })
+    return histories;
+  }
+
   players = computed<Player[]>(() => {
     const myId = this.authService.getPlayerId();
     const numPlayers = this.roomInfo().playerIds.length;
     const currentPlayerIdx = myId ? this.roomInfo().playerIds.indexOf(this.authService.getPlayerId()) : 0;
     const totalNumPoints = this.sharedGameState().players.reduce((acc, player) => acc + player.numPoints, 0);
     const avgNumPoints = totalNumPoints / numPlayers;
+    const handHistories = this.handHistories();
     return this.roomInfo().playerIds.map((playerId, index) => {
       const player = this.sharedGameState().players.find(player => player.playerId === playerId);
       const numPoints = player?.numPoints ?? 0;
@@ -56,7 +75,8 @@ export class GameComponent {
       const isOffline = this.roomInfo().offlinePlayers.includes(playerId);
       const isTheirTurn = playerId === this.sharedGameState().currentPlayerId;
       const cards = playerId === myId ? this.privateGameState()?.cards : undefined
-      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline, numCards, isTheirTurn, cards };
+      const handHistory = handHistories.get(playerId) ?? [];
+      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline, numCards, isTheirTurn, cards, handHistory };
     });
   });
 

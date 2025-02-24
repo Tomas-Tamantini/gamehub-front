@@ -1,5 +1,10 @@
 import { Card } from "../../../../../core/models/card.model";
 
+export default interface Hand {
+    cards: Card[];
+    isHandToBeat: boolean;
+}
+
 export interface Player {
     playerId: string;
     angleAroundTableDegrees: number;
@@ -9,4 +14,5 @@ export interface Player {
     isTheirTurn: boolean;
     numCards: number;
     cards?: Card[];
+    handHistory: Hand[];
 }

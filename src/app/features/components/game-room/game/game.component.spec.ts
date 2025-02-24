@@ -6,6 +6,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { Card } from '../../../../core/models/card.model';
 import { GameService } from '../../../../core/services/game.service';
 import { CardsService } from '../../../../core/services/cards.service';
+import Hand from './player/player.model';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -32,7 +33,7 @@ describe('GameComponent', () => {
     cardsServiceSpy = TestBed.inject(CardsService) as jasmine.SpyObj<CardsService>;
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    componentRef.setInput('sharedGameState', { players: [] });
+    componentRef.setInput('sharedGameState', { players: [], moveHistory: [] });
     componentRef.setInput('privateGameState', null);
     componentRef.setInput('roomInfo', {
       roomId: 123,
@@ -78,6 +79,16 @@ describe('GameComponent', () => {
           { playerId: "Alice", numPoints: 1, numCards: 3 },
         ],
         currentPlayerId: "Bob",
+        moveHistory: [
+          { playerId: "Bob", cards: [{ rank: 'A', suit: 'd' }] },
+          { playerId: "Charlie", cards: [] },
+          { playerId: "Diana", cards: [{ rank: '2', suit: 'd' }] },
+          { playerId: "Alice", cards: [{ rank: '2', suit: 'h' }] },
+          { playerId: "Bob", cards: [] },
+          { playerId: "Charlie", cards: [] },
+          { playerId: "Diana", cards: [{ rank: '2', suit: 's' }] },
+          { playerId: "Alice", cards: [] },
+        ],
       });
     });
 
@@ -137,6 +148,29 @@ describe('GameComponent', () => {
       const computed = component.players();
       const computedPrivateCards = computed.map(player => player.cards);
       expect(computedPrivateCards).toEqual([undefined, cards, undefined, undefined]);
+    });
+
+    it('should map hand history', () => {
+      const aliceHistory: Hand[] = [
+        { isHandToBeat: false, cards: [{ rank: '2', suit: 'h' }] },
+        { isHandToBeat: false, cards: [] },
+      ];
+      const bobHistory: Hand[] = [
+        { isHandToBeat: false, cards: [{ rank: 'A', suit: 'd' }] },
+        { isHandToBeat: false, cards: [] },
+      ];
+      const charlieHistory: Hand[] = [
+        { isHandToBeat: false, cards: [] },
+        { isHandToBeat: false, cards: [] },
+      ];
+      const dianaHistory: Hand[] = [
+        { isHandToBeat: false, cards: [{ rank: '2', suit: 'd' }] },
+        { isHandToBeat: true, cards: [{ rank: '2', suit: 's' }] },
+      ];
+
+      const computed = component.players();
+      const computedHistory = computed.map(player => player.handHistory);
+      expect(computedHistory).toEqual([aliceHistory, bobHistory, charlieHistory, dianaHistory]);
     });
   });
 });
