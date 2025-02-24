@@ -1,33 +1,59 @@
 .history-container {
     display: flex;
     flex-direction: column;
-    gap: 2px
-}
+    gap: 5px;
 
-.hand-container {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
+    .pass-msg {
+        font-size: 12px;
+        color: white;
 
-    .card {
-        border-radius: 5px;
-        width: 22px;
-        height: 33px;
-        display: flex;
-        font-weight: bold;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-        user-select: none;
-        justify-content: center;
-        align-items: center;
-        background-color: white;
-        border: 1px solid black;
-
-        &.black-suit {
-            color: black;
-        }
-
-        &.red-suit {
-            color: red;
+        &.most-recent {
+            font-size: large;
         }
     }
+
+    .hand-container {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        border-radius: 5px;
+
+        &.hand-to-beat {
+            box-shadow: 0 0 10px 2px yellow
+        }
+
+        .card {
+            border-radius: 5px;
+
+            display: flex;
+            font-weight: bold;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+            user-select: none;
+            background-color: white;
+            border: 1px solid black;
+            padding: 1px;
+
+            &.most-recent {
+                width: 22px;
+                height: 30px;
+            }
+
+            &.black-suit {
+                color: #777777;
+
+                &.most-recent {
+                    color: black;
+                }
+            }
+
+            &.red-suit {
+                color: rgb(228, 134, 134);
+
+                &.most-recent {
+                    color: red;
+                }
+            }
+        }
+    }
+
 }
