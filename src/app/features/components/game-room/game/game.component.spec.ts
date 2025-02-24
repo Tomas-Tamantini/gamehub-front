@@ -4,24 +4,28 @@ import { GameComponent } from './game.component';
 import { ComponentRef } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Card } from '../../../../core/models/card.model';
+import { GameService } from '../../../../core/services/game.service';
 
 describe('GameComponent', () => {
   let component: GameComponent;
   let componentRef: ComponentRef<GameComponent>;
   let fixture: ComponentFixture<GameComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let gameServiceSpy: jasmine.SpyObj<GameService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GameComponent],
       providers: [
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
+        { provide: GameService, useValue: jasmine.createSpyObj('GameService', ['passTurn', 'playCards']) },
       ]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(GameComponent);
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    gameServiceSpy = TestBed.inject(GameService) as jasmine.SpyObj<GameService>;
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     componentRef.setInput('sharedGameState', { players: [] });
@@ -44,6 +48,18 @@ describe('GameComponent', () => {
     componentRef.setInput('sharedGameState', { currentPlayerId: "Alice" });
     expect(component.isMyTurn()).toBeFalse();
   });
+
+  describe('make move', () => {
+    it('should pass turn', () => {
+      component.passTurn();
+      expect(gameServiceSpy.passTurn).toHaveBeenCalled();
+    });
+
+    it('should play cards', () => {
+      component.playCards();
+      expect(gameServiceSpy.playCards).toHaveBeenCalled();
+    });
+  })
 
   describe('computed players', () => {
     beforeEach(() => {
