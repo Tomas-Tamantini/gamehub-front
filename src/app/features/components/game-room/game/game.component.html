@@ -5,9 +5,11 @@
             <app-player [player]="player"></app-player>
         </div>
         }
+        @if (isMyTurn()) {
         <div class="action-area">
             <button mat-flat-button>Pass</button>
             <button mat-flat-button>Play</button>
         </div>
+        }
     </div>
 </div>

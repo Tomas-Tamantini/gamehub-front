@@ -19,6 +19,8 @@ export class GameComponent {
   roomInfo = input.required<RoomSummary>();
   authService = inject(AuthService);
 
+  isMyTurn = computed(() => this.sharedGameState().currentPlayerId === this.authService.getPlayerId());
+
   private static playerAngle(offset: number, numPlayers: number): number {
     const angle = 90 * (7 * numPlayers - 4 * offset) / numPlayers
     return angle % 360;

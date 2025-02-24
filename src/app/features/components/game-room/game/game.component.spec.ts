@@ -37,6 +37,14 @@ describe('GameComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should indicate whether it is the player\'s turn', () => {
+    authServiceSpy.getPlayerId.and.returnValue("Bob");
+    componentRef.setInput('sharedGameState', { currentPlayerId: "Bob" });
+    expect(component.isMyTurn()).toBeTrue();
+    componentRef.setInput('sharedGameState', { currentPlayerId: "Alice" });
+    expect(component.isMyTurn()).toBeFalse();
+  });
+
   describe('computed players', () => {
     beforeEach(() => {
       componentRef.setInput('sharedGameState', {
