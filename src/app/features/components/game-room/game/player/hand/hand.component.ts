@@ -28,6 +28,10 @@ export class HandComponent implements OnChanges {
     this.cardsService.clearSelection();
   }
 
+  sort() {
+    this.cardsService.sortHand();
+  }
+
   drop(event: CdkDragDrop<Card[]>) {
     this.cardsService.moveCard(event.previousIndex, event.currentIndex);
   }

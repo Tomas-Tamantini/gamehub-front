@@ -76,4 +76,20 @@ describe('CardsService', () => {
       expect(service.getHand()).toEqual(cards);
     });
   })
+
+  describe('sorting', () => {
+    it('should sort in ascending order if cards are shuffled', () => {
+      const cards = [_card('2h'), _card('3d'), _card('3h')];
+      service.setHand(cards);
+      service.sortHand();
+      expect(service.getHand()).toEqual([_card('3d'), _card('3h'), _card('2h')]);
+    });
+
+    it('should sort in descending order if cards are already in ascending order', () => {
+      const cards = [_card('Jd'), _card('Qh')];
+      service.setHand(cards);
+      service.sortHand();
+      expect(service.getHand()).toEqual([_card('Qh'), _card('Jd')]);
+    });
+  })
 });

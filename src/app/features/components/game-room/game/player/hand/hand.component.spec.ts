@@ -21,6 +21,7 @@ describe('HandComponent', () => {
             'selectedCards',
             'clearSelection',
             'moveCard',
+            'sortHand',
             'setHand',
             'getHand'
           ])
@@ -55,27 +56,37 @@ describe('HandComponent', () => {
     expect(component.hand()).toEqual([{ suit: 'h', rank: '2' }]);
   })
 
-  it('should toggle card selection', () => {
-    const card: Card = { suit: 'h', rank: '2' };
-    component.toggleSelected(card);
-    expect(cardsServiceSpy.toggleSelection).toHaveBeenCalledWith(card);
+  describe('card selection', () => {
+    it('should toggle card selection', () => {
+      const card: Card = { suit: 'h', rank: '2' };
+      component.toggleSelected(card);
+      expect(cardsServiceSpy.toggleSelection).toHaveBeenCalledWith(card);
+    });
+
+
+    it('should indicate whether card is selected', () => {
+      const card: Card = { suit: 'h', rank: '2' };
+      cardsServiceSpy.selectedCards.and.returnValue(new Set([card]));
+      expect(component.isSelected(card)).toBeTrue();
+      expect(component.isSelected({ suit: 'h', rank: '3' })).toBeFalse();
+    });
+
+    it('should clear selection', () => {
+      component.clearSelection();
+      expect(cardsServiceSpy.clearSelection).toHaveBeenCalled();
+    });
   });
 
-  it('should indicate whether card is selected', () => {
-    const card: Card = { suit: 'h', rank: '2' };
-    cardsServiceSpy.selectedCards.and.returnValue(new Set([card]));
-    expect(component.isSelected(card)).toBeTrue();
-    expect(component.isSelected({ suit: 'h', rank: '3' })).toBeFalse();
-  });
+  describe('card reordering', () => {
+    it('should move cards', () => {
+      const move = { previousIndex: 8, currentIndex: 5 };
+      component.drop(move as any);
+      expect(cardsServiceSpy.moveCard).toHaveBeenCalledWith(8, 5);
+    });
 
-  it('should clear selection', () => {
-    component.clearSelection();
-    expect(cardsServiceSpy.clearSelection).toHaveBeenCalled();
-  });
-
-  it('should reorder cards', () => {
-    const move = { previousIndex: 8, currentIndex: 5 };
-    component.drop(move as any);
-    expect(cardsServiceSpy.moveCard).toHaveBeenCalledWith(8, 5);
+    it('should sort cards', () => {
+      component.sort();
+      expect(cardsServiceSpy.sortHand).toHaveBeenCalled();
+    });
   });
 });

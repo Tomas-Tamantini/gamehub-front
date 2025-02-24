@@ -1,3 +1,26 @@
+.hand-container {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: 2px;
+}
+
+.sort-btn {
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
 .cards-container {
     display: flex;
     justify-content: center;

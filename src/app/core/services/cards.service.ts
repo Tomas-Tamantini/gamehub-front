@@ -14,6 +14,14 @@ export class CardsService {
     );
   }
 
+  private static cardValue(card: Card): number {
+    const sortedRanks = "3456789TJQKA2";
+    const sortedSuits = "dhsc";
+    const suitValue = sortedSuits.indexOf(card.suit);
+    const rankValue = sortedRanks.indexOf(card.rank);
+    return rankValue * 4 + suitValue;
+  }
+
   toggleSelection(card: Card): void {
     if (this.selected.has(card)) {
       this.selected.delete(card);
@@ -44,5 +52,15 @@ export class CardsService {
 
   getHand(): Card[] {
     return this.hand;
+  }
+
+  sortHand(): void {
+    const isAscending = this.hand.every((card, i) => {
+      return i === 0 || CardsService.cardValue(card) > CardsService.cardValue(this.hand[i - 1]);
+    });
+    this.hand.sort((a, b) => {
+      return CardsService.cardValue(a) - CardsService.cardValue(b);
+    });
+    if (isAscending) this.hand.reverse();
   }
 }
