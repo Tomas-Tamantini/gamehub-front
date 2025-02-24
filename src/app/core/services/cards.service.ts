@@ -50,15 +50,18 @@ export class CardsService {
   }
 
   moveCard(previousIndex: number, newIndex: number): void {
+    if (previousIndex < 0 || previousIndex >= this.hand.length) return;
+    if (newIndex < 0 || newIndex >= this.hand.length) return;
     const card = this.hand[previousIndex];
     this.hand.splice(previousIndex, 1);
     this.hand.splice(newIndex, 0, card);
   }
 
   setHand(cards: Card[]): void {
-    this.hand = cards.sort((a, b) => {
+    const ordered = cards.slice().sort((a, b) => {
       return this.cardIndex(a) - this.cardIndex(b);
     });
+    this.hand = ordered;
     this.selected = this.hand.filter(card => this.isSelected(card));
   }
 

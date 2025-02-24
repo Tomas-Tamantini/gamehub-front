@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, input, OnChanges, SimpleChanges } from '@angular/core';
 import { Card } from '../../../../../../core/models/card.model';
 import { SuitPipe } from '../../../../../../core/pipes/suit.pipe';
 import { CardsService } from '../../../../../../core/services/cards.service';
@@ -14,7 +14,10 @@ export class HandComponent implements OnChanges {
   numCards = input.required<number>();
   cards = input.required<Card[] | undefined>();
   cardsService = inject(CardsService);
-  hand = computed(() => this.cardsService.getHand());
+
+  hand() {
+    return this.cardsService.getHand();
+  }
 
   isSelected(card: Card) {
     return this.cardsService.isSelected(card);
