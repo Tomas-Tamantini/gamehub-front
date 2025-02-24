@@ -5,6 +5,29 @@ $points-color: #f39c12;
 $money-color: #2ecc71;
 $red-color: #e74c3c;
 
+.player-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    &.top {
+        flex-direction: column;
+    }
+
+    &.bottom {
+        flex-direction: column-reverse;
+    }
+
+    &.left {
+        flex-direction: row;
+    }
+
+    &.right {
+        flex-direction: row-reverse;
+    }
+}
+
 .badge-hand-container {
     display: flex;
     flex-direction: column;

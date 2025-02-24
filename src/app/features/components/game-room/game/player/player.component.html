@@ -1,4 +1,4 @@
-<div class="player-private">
+<div class="player-container" [class]="containerPosition()">
     <div class="badge-hand-container">
         <div class="player-badge" [class.is-their-turn]="player().isTheirTurn">
             <span class="player-id" [class.offline]="player().isOffline">
@@ -15,4 +15,5 @@
         </div>
         <app-hand [numCards]="player().numCards" [cards]="player().cards"></app-hand>
     </div>
+    <app-hand-history></app-hand-history>
 </div>
