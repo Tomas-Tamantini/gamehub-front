@@ -36,6 +36,33 @@ describe('CardsService', () => {
       service.clearSelection();
       expect(service.selectedCards()).toEqual([]);
     });
+
+    it('should organize selected cards in ascending order of value by default', () => {
+      service.toggleSelection(_card('2h'));
+      service.toggleSelection(_card('3h'));
+      expect(service.selectedCards()).toEqual([_card('3h'), _card('2h')]);
+    })
+
+    it('should organize A-5 sequence with ace first', () => {
+      service.toggleSelection(_card('3d'));
+      service.toggleSelection(_card('5s'));
+      service.toggleSelection(_card('4c'));
+      service.toggleSelection(_card('2h'));
+      service.toggleSelection(_card('Ac'));
+      expect(service.selectedCards()).toEqual([
+        _card('Ac'), _card('2h'), _card('3d'), _card('4c'), _card('5s')
+      ]);
+    })
+    it('should organize 2-6 sequence with 2 first', () => {
+      service.toggleSelection(_card('3d'));
+      service.toggleSelection(_card('5s'));
+      service.toggleSelection(_card('4c'));
+      service.toggleSelection(_card('2h'));
+      service.toggleSelection(_card('6c'));
+      expect(service.selectedCards()).toEqual([
+        _card('2h'), _card('3d'), _card('4c'), _card('5s'), _card('6c')
+      ]);
+    })
   });
 
   describe('hand', () => {

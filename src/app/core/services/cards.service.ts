@@ -32,7 +32,13 @@ export class CardsService {
   }
 
   selectedCards(): Card[] {
-    return this.selected;
+    const sorted = this.selected.sort((a, b) => {
+      return CardsService.cardValue(a) - CardsService.cardValue(b);
+    });
+    const ranks = sorted.map(card => card.rank).join('');
+    if (ranks === '345A2') return sorted.slice(3).concat(sorted.slice(0, 3));
+    else if (ranks === '34562') return sorted.slice(4).concat(sorted.slice(0, 4));
+    else return sorted;
   }
 
   isSelected(card: Card): boolean {
