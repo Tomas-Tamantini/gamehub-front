@@ -8,7 +8,7 @@
     @for (card of cards(); track $index) {
     <div class="card private" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
         [class.black-suit]="card.suit === 'c' || card.suit === 's'" [class.selected]="isSelected(card)"
-        (click)=" toggleSelected(card)" (keyup.enter)="toggleSelected(card)" tabindex="0">
+        (click)=" toggleSelected(card)" (keyup.enter)="toggleSelected(card)" tabindex="0" (dblclick)="clearSelection()">
         {{card.rank}}{{card.suit | suit}}
     </div>
     }

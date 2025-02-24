@@ -18,4 +18,8 @@ export class CardsService {
   selectedCards(): Set<Card> {
     return this.selected;
   }
+
+  clearSelection(): void {
+    this.selected = new Set<Card>();
+  }
 }

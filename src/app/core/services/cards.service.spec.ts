@@ -26,4 +26,11 @@ describe('CardsService', () => {
     service.toggleSelection(card);
     expect(service.selectedCards()).toEqual(new Set());
   });
+
+  it('should clear selection', () => {
+    service.toggleSelection({ rank: '2', suit: 'h' });
+    service.toggleSelection({ rank: '3', suit: 'h' });
+    service.clearSelection();
+    expect(service.selectedCards()).toEqual(new Set());
+  })
 });

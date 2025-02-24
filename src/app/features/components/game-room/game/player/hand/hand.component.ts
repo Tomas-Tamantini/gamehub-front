@@ -21,4 +21,8 @@ export class HandComponent {
   toggleSelected(card: Card) {
     this.cardsService.toggleSelection(card);
   }
+
+  clearSelection() {
+    this.cardsService.clearSelection();
+  }
 }

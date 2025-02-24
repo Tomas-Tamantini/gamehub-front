@@ -15,7 +15,7 @@ describe('HandComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HandComponent],
       providers: [
-        { provide: CardsService, useValue: jasmine.createSpyObj('CardsService', ['toggleSelection', 'selectedCards']) },
+        { provide: CardsService, useValue: jasmine.createSpyObj('CardsService', ['toggleSelection', 'selectedCards', 'clearSelection']) },
       ]
     })
       .compileComponents();
@@ -44,5 +44,10 @@ describe('HandComponent', () => {
     cardsServiceSpy.selectedCards.and.returnValue(new Set([card]));
     expect(component.isSelected(card)).toBeTrue();
     expect(component.isSelected({ suit: 'h', rank: '3' })).toBeFalse();
+  });
+
+  it('should clear selection', () => {
+    component.clearSelection();
+    expect(cardsServiceSpy.clearSelection).toHaveBeenCalled();
   });
 });
