@@ -5,10 +5,11 @@ import { PlayerComponent } from "./player/player.component";
 import { AuthService } from '../../../../core/services/auth.service';
 import { SharedGameState } from '../../../../core/models/shared-view.model';
 import { PrivateView } from '../../../../core/models/private-view.model';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-game',
-  imports: [PlayerComponent],
+  imports: [PlayerComponent, MatButtonModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
