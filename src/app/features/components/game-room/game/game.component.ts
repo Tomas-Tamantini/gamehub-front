@@ -30,7 +30,9 @@ export class GameComponent {
   }
 
   playCards() {
-    this.gameService.makeMove(this.roomInfo().roomId, this.cardsService.selectedCards());
+    const roomId = this.roomInfo().roomId;
+    const selectedCards = Array.from(this.cardsService.selectedCards());
+    this.gameService.makeMove(roomId, selectedCards);
   }
 
   private static playerAngle(offset: number, numPlayers: number): number {

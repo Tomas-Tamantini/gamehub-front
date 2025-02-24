@@ -5,8 +5,17 @@ import { Card } from '../models/card.model';
   providedIn: 'root'
 })
 export class CardsService {
+  private selected: Set<Card> = new Set();
 
-  selectedCards(): Card[] {
-    return [];
+  toggleSelection(card: Card): void {
+    if (this.selected.has(card)) {
+      this.selected.delete(card);
+    } else {
+      this.selected.add(card);
+    }
+  }
+
+  selectedCards(): Set<Card> {
+    return this.selected;
   }
 }
