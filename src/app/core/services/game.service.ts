@@ -15,6 +15,6 @@ export class GameService {
   }
 
   playCards(roomId: number) {
-    console.log("Implement playCards");
+    console.log("Implement playCards ", roomId);
   }
 }
