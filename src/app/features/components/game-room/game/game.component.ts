@@ -31,7 +31,7 @@ export class GameComponent {
 
   playCards() {
     const roomId = this.roomInfo().roomId;
-    const selectedCards = Array.from(this.cardsService.selectedCards());
+    const selectedCards = this.cardsService.selectedCards();
     this.gameService.makeMove(roomId, selectedCards);
   }
 

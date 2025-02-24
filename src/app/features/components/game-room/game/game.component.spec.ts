@@ -61,10 +61,10 @@ describe('GameComponent', () => {
     });
 
     it('should play cards', () => {
-      const cards = new Set<Card>([{ rank: 'A', suit: 'd' }]);
+      const cards: Card[] = [{ rank: 'A', suit: 'd' }];
       cardsServiceSpy.selectedCards.and.returnValue(cards);
       component.playCards();
-      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, Array.from(cards));
+      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, cards);
     });
   })
 

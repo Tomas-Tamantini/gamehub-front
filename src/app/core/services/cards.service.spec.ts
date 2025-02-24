@@ -19,22 +19,22 @@ describe('CardsService', () => {
 
   describe('card selection', () => {
     it('should have no selected cards at the beginning', () => {
-      expect(service.selectedCards()).toEqual(new Set());
+      expect(service.selectedCards()).toEqual([]);
     });
 
     it('should toggle card selection', () => {
       const card: Card = _card('2h');
       service.toggleSelection(card);
-      expect(service.selectedCards()).toEqual(new Set([card]));
+      expect(service.selectedCards()).toEqual([card]);
       service.toggleSelection(card);
-      expect(service.selectedCards()).toEqual(new Set());
+      expect(service.selectedCards()).toEqual([]);
     });
 
     it('should clear selection', () => {
       service.toggleSelection(_card('2h'));
       service.toggleSelection(_card('3h'));
       service.clearSelection();
-      expect(service.selectedCards()).toEqual(new Set());
+      expect(service.selectedCards()).toEqual([]);
     });
   });
 
@@ -57,8 +57,7 @@ describe('CardsService', () => {
       expect(service.getHand()).toEqual([_card('9d'), _card('3c'), _card('5s')]);
     });
 
-    xit('should preserve selection on hand updates', () => {
-      // TODO: Find out why this test is failing
+    it('should preserve selection on hand updates', () => {
       const cards = [_card('2h'), _card('3c'), _card('4d'), _card('5s')];
       service.setHand(cards);
       service.clearSelection();
@@ -66,7 +65,7 @@ describe('CardsService', () => {
       service.toggleSelection(_card('3c'));
       const newCards = [_card('5s'), _card('3c'), _card('9d')]
       service.setHand(newCards)
-      expect(service.selectedCards()).toEqual(new Set([_card('3c')]));
+      expect(service.selectedCards()).toEqual([_card('3c')]);
     });
   });
 

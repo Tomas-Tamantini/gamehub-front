@@ -17,7 +17,7 @@ export class HandComponent implements OnChanges {
   hand = computed(() => this.cardsService.getHand());
 
   isSelected(card: Card) {
-    return this.cardsService.selectedCards().has(card);
+    return this.cardsService.isSelected(card);
   }
 
   toggleSelected(card: Card) {

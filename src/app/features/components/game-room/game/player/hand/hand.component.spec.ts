@@ -18,7 +18,7 @@ describe('HandComponent', () => {
         {
           provide: CardsService, useValue: jasmine.createSpyObj('CardsService', [
             'toggleSelection',
-            'selectedCards',
+            'isSelected',
             'clearSelection',
             'moveCard',
             'sortHand',
@@ -46,7 +46,7 @@ describe('HandComponent', () => {
   it('should set hand whenever input changes', () => {
     const cards: Card[] = [{ suit: 'h', rank: '2' }]
     componentRef.setInput('cards', cards)
-    cardsServiceSpy.selectedCards.and.returnValue(new Set());
+    cardsServiceSpy.isSelected.and.returnValue(false);
     fixture.detectChanges();
     expect(cardsServiceSpy.setHand).toHaveBeenCalledWith(cards);
   });
@@ -66,9 +66,8 @@ describe('HandComponent', () => {
 
     it('should indicate whether card is selected', () => {
       const card: Card = { suit: 'h', rank: '2' };
-      cardsServiceSpy.selectedCards.and.returnValue(new Set([card]));
+      cardsServiceSpy.isSelected.and.returnValue(true);
       expect(component.isSelected(card)).toBeTrue();
-      expect(component.isSelected({ suit: 'h', rank: '3' })).toBeFalse();
     });
 
     it('should clear selection', () => {

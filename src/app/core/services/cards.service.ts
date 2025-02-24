@@ -6,7 +6,7 @@ import { Card } from '../models/card.model';
 })
 export class CardsService {
   private hand: Card[] = [];
-  private selected = new Set<Card>();
+  private selected: Card[] = [];
 
   private cardIndex(card: Card): number {
     return this.hand.findIndex(
@@ -23,19 +23,24 @@ export class CardsService {
   }
 
   toggleSelection(card: Card): void {
-    if (this.selected.has(card)) {
-      this.selected.delete(card);
-    } else {
-      this.selected.add(card);
+    if (this.isSelected(card)) {
+      this.selected = this.selected.filter(c => c.rank !== card.rank || c.suit !== card.suit);
+    }
+    else {
+      this.selected.push(card);
     }
   }
 
-  selectedCards(): Set<Card> {
+  selectedCards(): Card[] {
     return this.selected;
   }
 
+  isSelected(card: Card): boolean {
+    return this.selected.some(c => c.rank === card.rank && c.suit === card.suit);
+  }
+
   clearSelection(): void {
-    this.selected = new Set<Card>();
+    this.selected = [];
   }
 
   moveCard(previousIndex: number, newIndex: number): void {
@@ -48,13 +53,7 @@ export class CardsService {
     this.hand = cards.sort((a, b) => {
       return this.cardIndex(a) - this.cardIndex(b);
     });
-    const newSelected = new Set<Card>();
-    for (const card of this.hand) {
-      if (this.selected.has(card)) {
-        newSelected.add(card);
-      }
-    }
-    this.selected = newSelected;
+    this.selected = this.hand.filter(card => this.isSelected(card));
   }
 
   getHand(): Card[] {
