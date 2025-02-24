@@ -17,7 +17,7 @@ describe('PlayerComponent', () => {
     fixture = TestBed.createComponent(PlayerComponent);
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
-    componentRef.setInput('player', { playerId: 'Alice' });
+    componentRef.setInput('player', { playerId: 'Alice', handHistory: [] });
     fixture.detectChanges();
   });
 
