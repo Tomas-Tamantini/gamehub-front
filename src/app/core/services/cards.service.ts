@@ -5,7 +5,7 @@ import { Card } from '../models/card.model';
   providedIn: 'root'
 })
 export class CardsService {
-  private selected: Set<Card> = new Set();
+  private selected = new Set<Card>();
 
   toggleSelection(card: Card): void {
     if (this.selected.has(card)) {
