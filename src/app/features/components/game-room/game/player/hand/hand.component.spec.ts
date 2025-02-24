@@ -17,7 +17,12 @@ describe('HandComponent', () => {
       providers: [
         {
           provide: CardsService, useValue: jasmine.createSpyObj('CardsService', [
-            'toggleSelection', 'selectedCards', 'clearSelection', 'moveCard'
+            'toggleSelection',
+            'selectedCards',
+            'clearSelection',
+            'moveCard',
+            'setHand',
+            'getHand'
           ])
         },
       ]
@@ -36,6 +41,19 @@ describe('HandComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set hand whenever input changes', () => {
+    const cards: Card[] = [{ suit: 'h', rank: '2' }]
+    componentRef.setInput('cards', cards)
+    cardsServiceSpy.selectedCards.and.returnValue(new Set());
+    fixture.detectChanges();
+    expect(cardsServiceSpy.setHand).toHaveBeenCalledWith(cards);
+  });
+
+  it('should get hand from service', () => {
+    cardsServiceSpy.getHand.and.returnValue([{ suit: 'h', rank: '2' }]);
+    expect(component.hand()).toEqual([{ suit: 'h', rank: '2' }]);
+  })
 
   it('should toggle card selection', () => {
     const card: Card = { suit: 'h', rank: '2' };

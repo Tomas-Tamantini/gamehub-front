@@ -5,7 +5,7 @@
 }
 @else {
 <div class="cards-container" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
-    @for (card of cards(); track $index) {
+    @for (card of hand(); track $index) {
     <div class="card private" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
         [class.black-suit]="card.suit === 'c' || card.suit === 's'" [class.selected]="isSelected(card)"
         (click)=" toggleSelected(card)" (keyup.enter)="toggleSelected(card)" tabindex="0" (dblclick)="clearSelection()"

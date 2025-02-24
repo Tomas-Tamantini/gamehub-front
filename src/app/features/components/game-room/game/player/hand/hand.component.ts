@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input, OnChanges, SimpleChanges } from '@angular/core';
 import { Card } from '../../../../../../core/models/card.model';
 import { SuitPipe } from '../../../../../../core/pipes/suit.pipe';
 import { CardsService } from '../../../../../../core/services/cards.service';
@@ -10,10 +10,11 @@ import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
   templateUrl: './hand.component.html',
   styleUrl: './hand.component.scss'
 })
-export class HandComponent {
+export class HandComponent implements OnChanges {
   numCards = input.required<number>();
   cards = input.required<Card[] | undefined>();
   cardsService = inject(CardsService);
+  hand = computed(() => this.cardsService.getHand());
 
   isSelected(card: Card) {
     return this.cardsService.selectedCards().has(card);
@@ -29,5 +30,11 @@ export class HandComponent {
 
   drop(event: CdkDragDrop<Card[]>) {
     this.cardsService.moveCard(event.previousIndex, event.currentIndex);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cards'].previousValue != changes['cards'].currentValue && this.cards() !== undefined) {
+      this.cardsService.setHand(this.cards()!);
+    }
   }
 }

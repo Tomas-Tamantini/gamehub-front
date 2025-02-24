@@ -6,6 +6,8 @@ import { Card } from '../models/card.model';
 describe('CardsService', () => {
   let service: CardsService;
 
+  const _card = (txt: string): Card => ({ rank: txt[0], suit: txt[1] } as Card);
+
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(CardsService);
@@ -15,22 +17,63 @@ describe('CardsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should have no selected cards at the beginning', () => {
-    expect(service.selectedCards()).toEqual(new Set());
+  describe('card selection', () => {
+    it('should have no selected cards at the beginning', () => {
+      expect(service.selectedCards()).toEqual(new Set());
+    });
+
+    it('should toggle card selection', () => {
+      const card: Card = _card('2h');
+      service.toggleSelection(card);
+      expect(service.selectedCards()).toEqual(new Set([card]));
+      service.toggleSelection(card);
+      expect(service.selectedCards()).toEqual(new Set());
+    });
+
+    it('should clear selection', () => {
+      service.toggleSelection(_card('2h'));
+      service.toggleSelection(_card('3h'));
+      service.clearSelection();
+      expect(service.selectedCards()).toEqual(new Set());
+    });
   });
 
-  it('should toggle card selection', () => {
-    const card: Card = { rank: '2', suit: 'h' };
-    service.toggleSelection(card);
-    expect(service.selectedCards()).toEqual(new Set([card]));
-    service.toggleSelection(card);
-    expect(service.selectedCards()).toEqual(new Set());
+  describe('hand', () => {
+    it('should have empty hand at the beginning', () => {
+      expect(service.getHand()).toEqual([]);
+    })
+
+    it('should get hand', () => {
+      const cards = [_card('2h'), _card('3h')];
+      service.setHand(cards);
+      expect(service.getHand()).toEqual(cards);
+    });
+
+    it('should preserve order on hand updates', () => {
+      const cards = [_card('2h'), _card('3c'), _card('4d'), _card('5s')];
+      service.setHand(cards);
+      const newCards = [_card('5s'), _card('3c'), _card('9d')]
+      service.setHand(newCards)
+      expect(service.getHand()).toEqual([_card('9d'), _card('3c'), _card('5s')]);
+
+    })
   });
 
-  it('should clear selection', () => {
-    service.toggleSelection({ rank: '2', suit: 'h' });
-    service.toggleSelection({ rank: '3', suit: 'h' });
-    service.clearSelection();
-    expect(service.selectedCards()).toEqual(new Set());
+  describe('move cards', () => {
+    it('should move cards around', () => {
+      const cards = [_card('2h'), _card('3h'), _card('4h')];
+      service.setHand(cards);
+      service.moveCard(0, 1);
+      service.moveCard(2, 0);
+      expect(service.getHand()).toEqual([_card('4h'), _card('3h'), _card('2h')]);
+    });
+
+    it('should do nothing if move indices are wrong', () => {
+      const cards = [_card('2h'), _card('3h'), _card('4h')];
+      service.setHand(cards);
+      service.moveCard(0, 3);
+      service.moveCard(2, -1);
+      expect(service.getHand()).toEqual(cards);
+    });
   })
 });

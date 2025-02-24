@@ -5,7 +5,14 @@ import { Card } from '../models/card.model';
   providedIn: 'root'
 })
 export class CardsService {
+  private hand: Card[] = [];
   private selected = new Set<Card>();
+
+  private cardIndex(card: Card): number {
+    return this.hand.findIndex(
+      c => c.rank === card.rank && c.suit === card.suit
+    );
+  }
 
   toggleSelection(card: Card): void {
     if (this.selected.has(card)) {
@@ -24,6 +31,18 @@ export class CardsService {
   }
 
   moveCard(previousIndex: number, newIndex: number): void {
-    console.log(previousIndex, newIndex)
+    const card = this.hand[previousIndex];
+    this.hand.splice(previousIndex, 1);
+    this.hand.splice(newIndex, 0, card);
+  }
+
+  setHand(cards: Card[]): void {
+    this.hand = cards.sort((a, b) => {
+      return this.cardIndex(a) - this.cardIndex(b);
+    });
+  }
+
+  getHand(): Card[] {
+    return this.hand;
   }
 }
