@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Hand } from '../player.model';
 
 @Component({
   selector: 'app-hand-history',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './hand-history.component.scss'
 })
 export class HandHistoryComponent {
-
+  history = input.required<Hand[]>();
 }

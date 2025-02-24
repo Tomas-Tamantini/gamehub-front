@@ -15,5 +15,5 @@
         </div>
         <app-hand [numCards]="player().numCards" [cards]="player().cards"></app-hand>
     </div>
-    <app-hand-history></app-hand-history>
+    <app-hand-history [history]="player().handHistory"></app-hand-history>
 </div>
