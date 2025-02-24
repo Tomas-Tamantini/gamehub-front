@@ -6,7 +6,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { Card } from '../../../../core/models/card.model';
 import { GameService } from '../../../../core/services/game.service';
 import { CardsService } from '../../../../core/services/cards.service';
-import Hand from './player/player.model';
+import { Hand } from './player/player.model';
 
 describe('GameComponent', () => {
   let component: GameComponent;

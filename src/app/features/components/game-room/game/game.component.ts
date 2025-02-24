@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { RoomSummary } from '../../../../core/models/room-summary.model';
-import Hand, { Player } from './player/player.model';
+import { Player } from './player/player.model';
 import { PlayerComponent } from "./player/player.component";
 import { AuthService } from '../../../../core/services/auth.service';
 import { SharedGameState } from '../../../../core/models/shared-view.model';

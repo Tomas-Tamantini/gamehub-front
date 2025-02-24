@@ -1,6 +1,6 @@
 import { Card } from "../../../../../core/models/card.model";
 
-export default interface Hand {
+export interface Hand {
     cards: Card[];
     isHandToBeat: boolean;
 }
