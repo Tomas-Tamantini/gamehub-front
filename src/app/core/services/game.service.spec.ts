@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { GameService } from './game.service';
 import { WebsocketService } from './websocket.service';
+import { Card } from '../models/card.model';
 
 describe('GameService', () => {
   let service: GameService;
@@ -23,8 +24,10 @@ describe('GameService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should send pass turn request', () => {
-    service.passTurn(123);
-    expect(socketServiceSpy.send).toHaveBeenCalledWith({ requestType: "MAKE_MOVE", payload: { roomId: 123, move: { cards: [] } } });
+  it('should send make move request', () => {
+    const roomId = 123;
+    const cards: Card[] = [{ rank: 'A', suit: 'h' }];
+    service.makeMove(roomId, cards);
+    expect(socketServiceSpy.send).toHaveBeenCalledWith({ requestType: "MAKE_MOVE", payload: { roomId, move: { cards } } });
   });
 });

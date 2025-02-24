@@ -18,7 +18,7 @@ describe('GameComponent', () => {
       imports: [GameComponent],
       providers: [
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
-        { provide: GameService, useValue: jasmine.createSpyObj('GameService', ['passTurn', 'playCards']) },
+        { provide: GameService, useValue: jasmine.createSpyObj('GameService', ['makeMove']) },
       ]
     })
       .compileComponents();
@@ -53,12 +53,12 @@ describe('GameComponent', () => {
   describe('make move', () => {
     it('should pass turn', () => {
       component.passTurn();
-      expect(gameServiceSpy.passTurn).toHaveBeenCalledWith(123);
+      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, []);
     });
 
     it('should play cards', () => {
       component.playCards();
-      expect(gameServiceSpy.playCards).toHaveBeenCalledWith(123);
+      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, []);
     });
   })
 

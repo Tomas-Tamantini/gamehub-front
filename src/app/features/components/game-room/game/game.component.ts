@@ -24,11 +24,11 @@ export class GameComponent {
   isMyTurn = computed(() => this.sharedGameState().currentPlayerId === this.authService.getPlayerId());
 
   passTurn() {
-    this.gameService.passTurn(this.roomInfo().roomId);
+    this.gameService.makeMove(this.roomInfo().roomId, []);
   }
 
   playCards() {
-    this.gameService.playCards(this.roomInfo().roomId);
+    this.gameService.makeMove(this.roomInfo().roomId, []);
   }
 
   private static playerAngle(offset: number, numPlayers: number): number {

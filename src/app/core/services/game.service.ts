@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { WebsocketService } from './websocket.service';
+import { Card } from '../models/card.model';
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +8,10 @@ import { WebsocketService } from './websocket.service';
 export class GameService {
   socketService = inject(WebsocketService);
 
-  passTurn(roomId: number) {
+  makeMove(roomId: number, cards: Card[]) {
     this.socketService.send({
       requestType: "MAKE_MOVE",
-      payload: { roomId, move: { cards: [] } }
+      payload: { roomId, move: { cards } }
     });
-  }
-
-  playCards(roomId: number) {
-    console.log("Implement playCards ", roomId);
   }
 }
