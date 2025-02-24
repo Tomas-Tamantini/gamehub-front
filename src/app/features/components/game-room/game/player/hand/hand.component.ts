@@ -37,7 +37,7 @@ export class HandComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['cards'].previousValue != changes['cards'].currentValue && this.cards() !== undefined) {
+    if (changes['cards']?.previousValue != changes['cards']?.currentValue && this.cards() !== undefined) {
       this.cardsService.setHand(this.cards()!);
     }
   }
