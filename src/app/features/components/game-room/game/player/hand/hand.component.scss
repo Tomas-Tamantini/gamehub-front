@@ -26,6 +26,15 @@
         background-color: #f0f0f0;
         color: black;
         margin-left: -11px;
+        cursor: pointer;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &.selected {
+            transform: translateY(-5px);
+        }
     }
 
     &.black-suit {

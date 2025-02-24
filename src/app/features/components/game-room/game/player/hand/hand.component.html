@@ -7,7 +7,8 @@
 <div class="cards-container">
     @for (card of cards(); track $index) {
     <div class="card private" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
-        [class.black-suit]="card.suit === 'c' || card.suit === 's'">
+        [class.black-suit]="card.suit === 'c' || card.suit === 's'" [class.selected]="isSelected(card)"
+        (click)=" toggleSelected(card)">
         {{card.rank}}{{card.suit | suit}}
     </div>
     }
