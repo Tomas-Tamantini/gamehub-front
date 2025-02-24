@@ -31,6 +31,7 @@ describe('GameComponent', () => {
     componentRef.setInput('sharedGameState', { players: [] });
     componentRef.setInput('privateGameState', null);
     componentRef.setInput('roomInfo', {
+      roomId: 123,
       playerIds: ["Alice", "Bob", "Charlie", "Diana"],
       offlinePlayers: ['Charlie'],
     });
@@ -52,12 +53,12 @@ describe('GameComponent', () => {
   describe('make move', () => {
     it('should pass turn', () => {
       component.passTurn();
-      expect(gameServiceSpy.passTurn).toHaveBeenCalled();
+      expect(gameServiceSpy.passTurn).toHaveBeenCalledWith(123);
     });
 
     it('should play cards', () => {
       component.playCards();
-      expect(gameServiceSpy.playCards).toHaveBeenCalled();
+      expect(gameServiceSpy.playCards).toHaveBeenCalledWith(123);
     });
   })
 
