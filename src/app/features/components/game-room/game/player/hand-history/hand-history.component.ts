@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Hand } from '../player.model';
 import { SuitPipe } from '../../../../../../core/pipes/suit.pipe';
 
