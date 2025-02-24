@@ -15,7 +15,11 @@ describe('HandComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HandComponent],
       providers: [
-        { provide: CardsService, useValue: jasmine.createSpyObj('CardsService', ['toggleSelection', 'selectedCards', 'clearSelection']) },
+        {
+          provide: CardsService, useValue: jasmine.createSpyObj('CardsService', [
+            'toggleSelection', 'selectedCards', 'clearSelection', 'moveCard'
+          ])
+        },
       ]
     })
       .compileComponents();
@@ -49,5 +53,11 @@ describe('HandComponent', () => {
   it('should clear selection', () => {
     component.clearSelection();
     expect(cardsServiceSpy.clearSelection).toHaveBeenCalled();
+  });
+
+  it('should reorder cards', () => {
+    const move = { previousIndex: 8, currentIndex: 5 };
+    component.drop(move as any);
+    expect(cardsServiceSpy.moveCard).toHaveBeenCalledWith(8, 5);
   });
 });

@@ -22,4 +22,8 @@ export class CardsService {
   clearSelection(): void {
     this.selected = new Set<Card>();
   }
+
+  moveCard(previousIndex: number, newIndex: number): void {
+    console.log(previousIndex, newIndex)
+  }
 }
