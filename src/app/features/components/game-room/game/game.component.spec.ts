@@ -5,6 +5,7 @@ import { ComponentRef } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Card } from '../../../../core/models/card.model';
 import { GameService } from '../../../../core/services/game.service';
+import { CardsService } from '../../../../core/services/cards.service';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -12,6 +13,7 @@ describe('GameComponent', () => {
   let fixture: ComponentFixture<GameComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let gameServiceSpy: jasmine.SpyObj<GameService>;
+  let cardsServiceSpy: jasmine.SpyObj<CardsService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -19,6 +21,7 @@ describe('GameComponent', () => {
       providers: [
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
         { provide: GameService, useValue: jasmine.createSpyObj('GameService', ['makeMove']) },
+        { provide: CardsService, useValue: jasmine.createSpyObj('CardsService', ['selectedCards']) },
       ]
     })
       .compileComponents();
@@ -26,6 +29,7 @@ describe('GameComponent', () => {
     fixture = TestBed.createComponent(GameComponent);
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     gameServiceSpy = TestBed.inject(GameService) as jasmine.SpyObj<GameService>;
+    cardsServiceSpy = TestBed.inject(CardsService) as jasmine.SpyObj<CardsService>;
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
     componentRef.setInput('sharedGameState', { players: [] });
@@ -57,8 +61,10 @@ describe('GameComponent', () => {
     });
 
     it('should play cards', () => {
+      const cards: Card[] = [{ rank: 'A', suit: 'd' }];
+      cardsServiceSpy.selectedCards.and.returnValue(cards);
       component.playCards();
-      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, []);
+      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, cards);
     });
   })
 

@@ -7,6 +7,7 @@ import { SharedGameState } from '../../../../core/models/shared-view.model';
 import { PrivateView } from '../../../../core/models/private-view.model';
 import { MatButtonModule } from '@angular/material/button';
 import { GameService } from '../../../../core/services/game.service';
+import { CardsService } from '../../../../core/services/cards.service';
 
 @Component({
   selector: 'app-game',
@@ -20,6 +21,7 @@ export class GameComponent {
   roomInfo = input.required<RoomSummary>();
   authService = inject(AuthService);
   gameService = inject(GameService);
+  cardsService = inject(CardsService);
 
   isMyTurn = computed(() => this.sharedGameState().currentPlayerId === this.authService.getPlayerId());
 
@@ -28,7 +30,7 @@ export class GameComponent {
   }
 
   playCards() {
-    this.gameService.makeMove(this.roomInfo().roomId, []);
+    this.gameService.makeMove(this.roomInfo().roomId, this.cardsService.selectedCards());
   }
 
   private static playerAngle(offset: number, numPlayers: number): number {
