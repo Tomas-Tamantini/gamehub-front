@@ -48,6 +48,13 @@ export class CardsService {
     this.hand = cards.sort((a, b) => {
       return this.cardIndex(a) - this.cardIndex(b);
     });
+    const newSelected = new Set<Card>();
+    for (const card of this.hand) {
+      if (this.selected.has(card)) {
+        newSelected.add(card);
+      }
+    }
+    this.selected = newSelected;
   }
 
   getHand(): Card[] {
