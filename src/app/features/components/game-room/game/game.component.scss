@@ -29,6 +29,41 @@ $table-width: 80vw;
             display: flex;
             flex-direction: row;
             gap: 10px;
+
+            .action-btn {
+                border: none;
+                padding: 10px 20px;
+                border-radius: 30px;
+                font-family: Roboto, "Helvetica Neue", sans-serif;
+                cursor: pointer;
+                font-weight: 500;
+
+                &.warn {
+                    background-color: #d53838;
+                    color: white;
+
+                    &:hover {
+                        background-color: #b52b2b;
+                    }
+
+                    &:active {
+                        background-color: #a21f1f;
+                    }
+                }
+
+                &.accent {
+                    background-color: #00dddd;
+                    color: #003737;
+
+                    &:hover {
+                        background-color: #00bfbf;
+                    }
+
+                    &:active {
+                        background-color: #00a3a3;
+                    }
+                }
+            }
         }
     }
 }

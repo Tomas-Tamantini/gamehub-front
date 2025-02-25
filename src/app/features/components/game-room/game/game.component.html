@@ -7,8 +7,8 @@
         }
         @if (isMyTurn()) {
         <div class="action-area">
-            <button mat-flat-button (click)="passTurn()">Pass</button>
-            <button mat-flat-button (click)="playCards()">Play</button>
+            <button class="action-btn warn" (click)="passTurn()">Pass</button>
+            <button class="action-btn accent" (click)="playCards()">Play</button>
         </div>
         }
     </div>

@@ -5,13 +5,12 @@ import { PlayerComponent } from "./player/player.component";
 import { AuthService } from '../../../../core/services/auth.service';
 import { SharedGameState } from '../../../../core/models/shared-view.model';
 import { PrivateView } from '../../../../core/models/private-view.model';
-import { MatButtonModule } from '@angular/material/button';
 import { GameService } from '../../../../core/services/game.service';
 import { CardsService } from '../../../../core/services/cards.service';
 
 @Component({
   selector: 'app-game',
-  imports: [PlayerComponent, MatButtonModule],
+  imports: [PlayerComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
