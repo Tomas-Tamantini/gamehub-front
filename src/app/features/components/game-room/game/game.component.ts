@@ -24,8 +24,12 @@ export class GameComponent {
 
   isMyTurn = computed(() => this.sharedGameState().currentPlayerId === this.authService.getPlayerId());
 
-  passTurn() {
+  passTurn(): void {
     this.gameService.makeMove(this.roomInfo().roomId, []);
+  }
+
+  noCardsSelected(): boolean {
+    return !this.cardsService.atLeastOneSelected();
   }
 
   playCards() {

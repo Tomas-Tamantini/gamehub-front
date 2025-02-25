@@ -62,6 +62,12 @@ $table-width: 80vw;
                     &:active {
                         background-color: #00a3a3;
                     }
+
+                    &:disabled {
+                        cursor: not-allowed;
+                        background-color: #dfdee2;
+                        color: #98979C;
+                    }
                 }
             }
         }

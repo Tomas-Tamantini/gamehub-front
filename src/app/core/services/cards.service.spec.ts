@@ -30,6 +30,20 @@ describe('CardsService', () => {
       expect(service.selectedCards()).toEqual([]);
     });
 
+    it('should indicate that card is selected', () => {
+      const card: Card = _card('2h');
+      expect(service.isSelected(card)).toBeFalse();
+      service.toggleSelection(card);
+      expect(service.isSelected(card)).toBeTrue();
+    });
+
+    it('should indicate that at least one card is selected', () => {
+      const card: Card = _card('2h');
+      expect(service.atLeastOneSelected()).toBeFalse();
+      service.toggleSelection(card);
+      expect(service.atLeastOneSelected()).toBeTrue();
+    });
+
     it('should clear selection', () => {
       service.toggleSelection(_card('2h'));
       service.toggleSelection(_card('3h'));

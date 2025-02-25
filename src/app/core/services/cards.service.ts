@@ -45,6 +45,10 @@ export class CardsService {
     return this.selected.some(c => c.rank === card.rank && c.suit === card.suit);
   }
 
+  atLeastOneSelected(): boolean {
+    return this.selected.length > 0;
+  }
+
   clearSelection(): void {
     this.selected = [];
   }

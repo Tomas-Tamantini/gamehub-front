@@ -22,7 +22,7 @@ describe('GameComponent', () => {
       providers: [
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
         { provide: GameService, useValue: jasmine.createSpyObj('GameService', ['makeMove']) },
-        { provide: CardsService, useValue: jasmine.createSpyObj('CardsService', ['selectedCards']) },
+        { provide: CardsService, useValue: jasmine.createSpyObj('CardsService', ['selectedCards', 'atLeastOneSelected']) },
       ]
     })
       .compileComponents();
@@ -47,12 +47,19 @@ describe('GameComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should indicate whether it is the player\'s turn', () => {
+  it('should indicate whether it is the players turn', () => {
     authServiceSpy.getPlayerId.and.returnValue("Bob");
     componentRef.setInput('sharedGameState', { currentPlayerId: "Bob" });
     expect(component.isMyTurn()).toBeTrue();
     componentRef.setInput('sharedGameState', { currentPlayerId: "Alice" });
     expect(component.isMyTurn()).toBeFalse();
+  });
+
+  it('should indicate whether no card has been selected', () => {
+    cardsServiceSpy.atLeastOneSelected.and.returnValue(false);
+    expect(component.noCardsSelected()).toBeTrue();
+    cardsServiceSpy.atLeastOneSelected.and.returnValue(true);
+    expect(component.noCardsSelected()).toBeFalse();
   });
 
   describe('make move', () => {
