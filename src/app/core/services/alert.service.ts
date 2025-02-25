@@ -15,4 +15,10 @@ export class AlertService {
       console.error(debugMsg);
     }
   }
+
+  alertWarning(message: string) {
+    this.snackbar.open(message, 'OK', {
+      duration: 5000
+    });
+  }
 }

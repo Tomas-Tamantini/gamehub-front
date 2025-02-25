@@ -9,6 +9,7 @@ import { LobbyComponent } from "./lobby/lobby.component";
 import { GameComponent } from "./game/game.component";
 import { SharedGameState } from '../../../core/models/shared-view.model';
 import { PrivateView } from '../../../core/models/private-view.model';
+import { GameStatus } from '../../../core/models/game-status.model';
 
 @Component({
   selector: 'app-game-room',
@@ -85,6 +86,9 @@ export class GameRoomComponent implements OnInit, OnDestroy {
       case "GAME_STATE":
         if (msg.payload.sharedView) {
           this.sharedGameState.set(msg.payload.sharedView);
+          if (msg.payload.sharedView.status === GameStatus.END_GAME) {
+            this.alertService.alertWarning("Game over!");
+          }
         }
         if (msg.payload.privateView) {
           this.privateGameState.set(msg.payload.privateView);

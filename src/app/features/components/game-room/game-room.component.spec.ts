@@ -41,7 +41,7 @@ describe('GameRoomComponent', () => {
           )
         },
         { provide: AuthService, useValue: jasmine.createSpyObj('AuthService', ['getPlayerId']) },
-        { provide: AlertService, useValue: jasmine.createSpyObj('AlertService', ['alertError']) },
+        { provide: AlertService, useValue: jasmine.createSpyObj('AlertService', ['alertError', 'alertWarning']) },
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
       ]
     })
@@ -161,6 +161,13 @@ describe('GameRoomComponent', () => {
     it('should alert on error message', () => {
       component.handleMessage({ messageType: "ERROR", payload: { error: 'error message' } });
       expect(alertServiceSpy.alertError).toHaveBeenCalledWith("error message");
+    });
+
+    it('should alert on game over', () => {
+      const sharedView = { status: "END_GAME" } as SharedGameState;
+      const mockState = { roomId: 123, sharedView } as GameState;
+      component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
+      expect(alertServiceSpy.alertWarning).toHaveBeenCalledWith("Game over!");
     });
 
     it('should rejoin game if error message is "Player already in room"', () => {
