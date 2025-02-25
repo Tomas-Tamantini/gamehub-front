@@ -3,7 +3,7 @@
     @if (hand.cards.length > 0) {
     <div class="hand-container" [class.hand-to-beat]="hand.isHandToBeat">
         @for (card of hand.cards; track $index) {
-        <div class="card" [class.most-recent]="last" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
+        <div class="card" [class.from-previous-rounds]="!last" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
             [class.black-suit]="card.suit === 'c' || card.suit === 's'">
             {{card.rank}}{{card.suit | suit}}
         </div>
@@ -11,7 +11,7 @@
     </div>
     }
     @else {
-    <span class="pass-msg" [class.most-recent]="last">Pass</span>
+    <span class="pass-msg" [class.from-previous-rounds]="!last">Pass</span>
     }
     }
 </div>

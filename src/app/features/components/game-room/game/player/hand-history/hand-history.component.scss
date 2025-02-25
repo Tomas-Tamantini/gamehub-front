@@ -1,14 +1,16 @@
+$transparency: 0.5;
+
 .history-container {
     display: flex;
     flex-direction: column;
     gap: 5px;
 
     .pass-msg {
-        font-size: 12px;
+        font-size: large;
         color: white;
 
-        &.most-recent {
-            font-size: large;
+        &.from-previous-rounds {
+            font-size: 12px;
         }
     }
 
@@ -32,25 +34,30 @@
             background-color: white;
             border: 1px solid black;
             padding: 1px;
+            width: 22px;
+            height: 30px;
 
-            &.most-recent {
-                width: 22px;
-                height: 30px;
+            &.from-previous-rounds {
+                width: fit-content;
+                height: fit-content;
+                border: none;
+                margin-right: 1px;
+                background-color: rgba(255, 255, 255, $transparency);
             }
 
             &.black-suit {
-                color: #777777;
+                color: black;
 
-                &.most-recent {
-                    color: black;
+                &.from-previous-rounds {
+                    color: rgba(0, 0, 0, $transparency);
                 }
             }
 
             &.red-suit {
-                color: rgb(228, 134, 134);
+                color: red;
 
-                &.most-recent {
-                    color: red;
+                &.from-previous-rounds {
+                    color: rgba(255, 0, 0, $transparency)
                 }
             }
         }
