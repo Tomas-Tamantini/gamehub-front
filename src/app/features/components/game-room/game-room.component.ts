@@ -55,7 +55,8 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   private sendInitialRequest(action: string | null) {
     const requestTypeMap = {
       join: "JOIN_GAME_BY_ID",
-      rejoin: "REJOIN_GAME"
+      rejoin: "REJOIN_GAME",
+      watch: "WATCH_GAME"
     }
     if (!action || !(action in requestTypeMap)) {
       this.alertService.alertError(`Invalid action: ${action}`);

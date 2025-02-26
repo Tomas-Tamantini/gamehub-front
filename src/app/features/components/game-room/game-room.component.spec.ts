@@ -98,6 +98,15 @@ describe('GameRoomComponent', () => {
       });
     });
 
+    it('should send watch game request', () => {
+      mockActivatedRoute.snapshot.queryParamMap.get.and.returnValue('watch');
+      component.ngOnInit();
+      expect(socketServiceSpy.send).toHaveBeenCalledWith({
+        requestType: 'WATCH_GAME',
+        payload: Object({ roomId: '123' })
+      });
+    });
+
     it('should alert on invalid action', () => {
       mockActivatedRoute.snapshot.queryParamMap.get.and.returnValue('play');
       component.ngOnInit();
