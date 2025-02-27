@@ -26,6 +26,7 @@ export class GameComponent {
 
   passTurn(): void {
     this.gameService.makeMove(this.roomInfo().roomId, []);
+    this.cardsService.clearSelection();
   }
 
   noCardsSelected(): boolean {
