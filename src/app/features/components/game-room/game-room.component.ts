@@ -89,6 +89,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
           this.sharedGameState.set(msg.payload.sharedView);
           if (msg.payload.sharedView.status === GameStatus.END_GAME) {
             this.alertService.alertWarning("Game over!");
+            this.privateGameState.set(null);
           }
         }
         if (msg.payload.privateView) {

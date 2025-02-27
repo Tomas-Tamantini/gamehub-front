@@ -172,12 +172,22 @@ describe('GameRoomComponent', () => {
       expect(alertServiceSpy.alertError).toHaveBeenCalledWith("error message");
     });
 
-    it('should alert on game over', () => {
-      const sharedView = { status: "END_GAME" } as SharedGameState;
-      const mockState = { roomId: 123, sharedView } as GameState;
-      component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
-      expect(alertServiceSpy.alertWarning).toHaveBeenCalledWith("Game over!");
-    });
+    describe('game over', () => {
+      beforeEach(() => {
+        const sharedView = { status: "END_GAME" } as SharedGameState;
+        const mockState = { roomId: 123, sharedView } as GameState;
+        component.privateGameState.set({} as PrivateView);
+        component.handleMessage({ messageType: "GAME_STATE", payload: mockState });
+      });
+
+      it('should alert on game over', () => {
+        expect(alertServiceSpy.alertWarning).toHaveBeenCalledWith("Game over!");
+      });
+
+      it('should reset private state on game over', () => {
+        expect(component.privateGameState()).toBeNull();
+      });
+    })
 
     it('should rejoin game if error message is "Player already in room"', () => {
       component.handleMessage({ messageType: "ERROR", payload: { error: 'Player already in room' } });
