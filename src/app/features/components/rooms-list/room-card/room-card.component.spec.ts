@@ -16,8 +16,7 @@ describe('RoomCardComponent', () => {
     roomId: 123,
     playerIds: ["Alice", "Bob", "Charlie", "Diana"],
     offlinePlayers: ["Alice", "Bob"],
-    isFull,
-    gameSpecificInfo: { creditsPerPoint: 1, pointThreshold: 10 }
+    isFull
   });
 
   beforeEach(async () => {
