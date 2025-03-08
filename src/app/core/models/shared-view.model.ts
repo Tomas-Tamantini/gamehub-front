@@ -12,20 +12,10 @@ export interface Move {
     cards: Card[];
 }
 
-export interface PlayerResult {
-    playerId: string;
-    distToAvg: number;
-}
-
-export interface Result {
-    players: PlayerResult[];
-}
-
 export interface SharedGameState {
     status: GameStatus;
     currentPlayerId?: string;
     players: SharedPlayerState[];
     moveHistory: Move[];
-    result?: Result;
 }
 
