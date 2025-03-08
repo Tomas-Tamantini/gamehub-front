@@ -48,8 +48,6 @@ export class GameComponent {
     const myId = this.authService.getPlayerId();
     const numPlayers = this.roomInfo().playerIds.length;
     const currentPlayerIdx = myId ? this.roomInfo().playerIds.indexOf(this.authService.getPlayerId()) : 0;
-    const totalNumPoints = this.sharedGameState().players.reduce((acc, player) => acc + player.numPoints, 0);
-    const avgNumPoints = totalNumPoints / numPlayers;
     const handToBeat = this.sharedGameState().moveHistory.slice().reverse().find(move => move.cards.length > 0)?.cards;
     return this.roomInfo().playerIds.map((playerId, index) => {
       const player = this.sharedGameState().players.find(player => player.playerId === playerId);
@@ -57,14 +55,14 @@ export class GameComponent {
       const numCards = player?.numCards ?? 0;
       const offset = (index - currentPlayerIdx + 4) % 4;
       const angleAroundTableDegrees = GameComponent.playerAngle(offset, numPlayers);
-      const partialResult = avgNumPoints - numPoints;
+      const partialCredit = player?.partialCredits ?? 0;
       const isOffline = this.roomInfo().offlinePlayers.includes(playerId);
       const isTheirTurn = playerId === this.sharedGameState().currentPlayerId;
       const cards = playerId === myId ? this.privateGameState()?.cards : undefined
       const handHistory = this.sharedGameState().moveHistory.filter(move => move.playerId === playerId).map(move => ({
         cards: move.cards, isHandToBeat: (move.cards == handToBeat)
       }));
-      return { playerId, angleAroundTableDegrees, numPoints, partialResult, isOffline, numCards, isTheirTurn, cards, handHistory };
+      return { playerId, angleAroundTableDegrees, numPoints, partialCredit, isOffline, numCards, isTheirTurn, cards, handHistory };
     });
   });
 

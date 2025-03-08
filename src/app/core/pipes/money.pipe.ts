@@ -6,14 +6,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MoneyPipe implements PipeTransform {
 
   transform(value: number): string {
-    const stringValue = Math.abs(value).toFixed(2);
-    if (stringValue === '0.00') {
-      return '$0.00';
-    } else if (value > 0) {
-      return `+$${stringValue}`;
-    } else {
-      return `-$${stringValue}`;
-    }
+    if (value === 0) return '$0.00';
+    const absValue = Math.abs(value);
+    const integral = Math.floor(absValue / 100);
+    const cents = absValue % 100;
+    const centsString = cents < 10 ? `0${cents}` : `${cents}`;
+    const sign = value > 0 ? '+' : '-';
+    return `${sign}$${integral}.${centsString}`;
   }
 
 }

@@ -8,8 +8,8 @@
                 <span class="num-points">
                     {{player().numPoints}} pts
                 </span>
-                <span class="money-amt" [class.negative]="player().partialResult < 0">
-                    {{ player().partialResult | money}}
+                <span class="money-amt" [class.negative]="player().partialCredit < 0">
+                    {{ player().partialCredit | money}}
                 </span>
             </div>
         </div>

@@ -85,10 +85,10 @@ describe('GameComponent', () => {
     beforeEach(() => {
       componentRef.setInput('sharedGameState', {
         players: [
-          { playerId: "Bob", numPoints: 2, numCards: 6 },
-          { playerId: "Charlie", numPoints: 3, numCards: 9 },
-          { playerId: "Diana", numPoints: 4, numCards: 12 },
-          { playerId: "Alice", numPoints: 1, numCards: 3 },
+          { playerId: "Bob", numPoints: 2, numCards: 6, partialCredits: 0 },
+          { playerId: "Charlie", numPoints: 3, numCards: 9, partialCredits: 0 },
+          { playerId: "Diana", numPoints: 4, numCards: 12, partialCredits: -1 },
+          { playerId: "Alice", numPoints: 1, numCards: 3, partialCredits: 1 },
         ],
         currentPlayerId: "Bob",
         moveHistory: [
@@ -122,10 +122,10 @@ describe('GameComponent', () => {
       expect(computedNumCards).toEqual([3, 6, 9, 12]);
     });
 
-    it('should calculate players partial results', () => {
+    it('should map players partial results', () => {
       const computed = component.players();
-      const computedResults = computed.map(player => player.partialResult);
-      expect(computedResults).toEqual([1.5, 0.5, -0.5, -1.5]);
+      const computedResults = computed.map(player => player.partialCredit);
+      expect(computedResults).toEqual([1, 0, 0, -1]);
     });
 
     it('should indicate offline players', () => {

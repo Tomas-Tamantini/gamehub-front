@@ -5,6 +5,7 @@ export interface SharedPlayerState {
     playerId: string;
     numPoints: number;
     numCards: number;
+    partialCredits: number;
 }
 
 export interface Move {
