@@ -21,4 +21,10 @@ describe('MoneyPipe', () => {
     expect(pipe.transform(100)).toBe('+$1.00');
     expect(pipe.transform(-3)).toBe('-$0.03');
   });
+
+  it('should not return plus signal if format is noSign', () => {
+    const pipe = new MoneyPipe();
+    expect(pipe.transform(100, 'noSign')).toBe('$1.00');
+    expect(pipe.transform(-3, 'noSign')).toBe('-$0.03');
+  });
 });
