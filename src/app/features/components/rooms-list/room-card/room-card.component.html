@@ -8,6 +8,8 @@
     </mat-card-header>
     <mat-card-content>
         <p class="white-text">Players: {{room().playerIds.length}}/{{room().capacity}}</p>
+        <p class="white-text">Price: {{room().gameSpecificInfo.creditsPerPoint | money}}/point</p>
+        <p class="white-text">Num. points: {{room().gameSpecificInfo.pointThreshold}}</p>
     </mat-card-content>
     <span class="spacer"></span>
     <mat-card-actions align="end">

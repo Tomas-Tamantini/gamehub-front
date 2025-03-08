@@ -11,8 +11,8 @@ describe('RoomsListComponent', () => {
   let httpServiceSpy: jasmine.SpyObj<HttpService>;
   const mockRooms = {
     items: [
-      { roomId: 1, capacity: 4, playerIds: ["Alice", "Bob"], offlinePlayers: [], isFull: false },
-      { roomId: 2, capacity: 2, playerIds: ["Charlie", "David"], offlinePlayers: [], isFull: true },
+      { roomId: 1, capacity: 4, playerIds: ["Alice", "Bob"], offlinePlayers: [], isFull: false, gameSpecificInfo: { creditsPerPoint: 1, pointThreshold: 10 } },
+      { roomId: 2, capacity: 2, playerIds: ["Charlie", "David"], offlinePlayers: [], isFull: true, gameSpecificInfo: { creditsPerPoint: 1, pointThreshold: 10 } },
     ]
   }
 

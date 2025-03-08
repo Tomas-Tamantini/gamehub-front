@@ -4,10 +4,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { MoneyPipe } from '../../../../core/pipes/money.pipe';
 
 @Component({
   selector: 'app-room-card',
-  imports: [MatCardModule, MatButtonModule],
+  imports: [MatCardModule, MatButtonModule, MoneyPipe],
   templateUrl: './room-card.component.html',
   styleUrl: './room-card.component.scss'
 })
