@@ -12,7 +12,6 @@ export class HttpService {
   private http = inject(HttpClient);
 
   public getGameRooms(): Observable<ListResponse<RoomSummary>> {
-    const queryParams = new URLSearchParams({ game_type: 'chinese_poker' });
-    return this.http.get<ListResponse<RoomSummary>>(`${environment.apiUrl}/rooms/?${queryParams.toString()}`);
+    return this.http.get<ListResponse<RoomSummary>>(`${environment.apiUrl}/rooms/chinese-poker`);
   }
 }

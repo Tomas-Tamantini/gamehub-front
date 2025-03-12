@@ -26,7 +26,7 @@ describe('HttpService', () => {
   it('should get game rooms from proper endpoint', () => {
     service.getGameRooms().subscribe();
     const baseUrl = environment.apiUrl;
-    const expectedEndpoint = `${baseUrl}/rooms/?game_type=chinese_poker`;
+    const expectedEndpoint = `${baseUrl}/rooms/chinese-poker`;
     const req = httpTestingController.expectOne(expectedEndpoint);
     expect(req.request.method).toBe('GET');
   });
