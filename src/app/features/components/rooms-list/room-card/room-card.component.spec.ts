@@ -16,6 +16,7 @@ describe('RoomCardComponent', () => {
     roomId: 123,
     playerIds: ["Alice", "Bob", "Charlie", "Diana"],
     offlinePlayers: ["Alice", "Bob"],
+    configuration: { gameOverPointThreshold: 15 },
     isFull
   });
 

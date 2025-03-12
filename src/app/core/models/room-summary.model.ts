@@ -4,4 +4,7 @@ export interface RoomSummary {
     playerIds: string[];
     offlinePlayers: string[];
     isFull: boolean;
+    configuration: {
+        gameOverPointThreshold: number;
+    }
 }

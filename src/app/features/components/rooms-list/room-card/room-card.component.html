@@ -1,13 +1,23 @@
 <mat-card appearance="outlined" class="room-card">
     <mat-card-header>
         <mat-card-title>
-            <span class="white-text">
-                China {{room().roomId}}
-            </span>
+            <span>China {{room().roomId}}</span>
         </mat-card-title>
     </mat-card-header>
+    <mat-divider> </mat-divider>
     <mat-card-content>
-        <p class="white-text">Players: {{room().playerIds.length}}/{{room().capacity}}</p>
+        <div class="room-info">
+            <mat-icon class="icon">group</mat-icon>
+            <p>Players</p>
+            <span class="spacer"></span>
+            <p><strong>{{ room().playerIds.length }}/{{ room().capacity }}</strong></p>
+        </div>
+        <div class="room-info">
+            <mat-icon class="icon">sports_esports</mat-icon>
+            <p>Num. points</p>
+            <span class="spacer"></span>
+            <p><strong>{{ room().configuration.gameOverPointThreshold }}</strong></p>
+        </div>
     </mat-card-content>
     <span class="spacer"></span>
     <mat-card-actions align="end">
