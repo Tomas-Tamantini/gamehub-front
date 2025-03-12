@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MoneyPipe } from '../../../../core/pipes/money.pipe';
 
 @Component({
   selector: 'app-room-card',
-  imports: [MatCardModule, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, MoneyPipe],
   templateUrl: './room-card.component.html',
   styleUrl: './room-card.component.scss'
 })

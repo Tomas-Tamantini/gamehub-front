@@ -6,5 +6,6 @@ export interface RoomSummary {
     isFull: boolean;
     configuration: {
         gameOverPointThreshold: number;
+        creditsPerPoint: number;
     }
 }

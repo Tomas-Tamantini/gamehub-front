@@ -13,10 +13,16 @@
             <p><strong>{{ room().playerIds.length }}/{{ room().capacity }}</strong></p>
         </div>
         <div class="room-info">
-            <mat-icon class="icon">sports_esports</mat-icon>
-            <p>Num. points</p>
+            <mat-icon class="icon">emoji_events</mat-icon>
+            <p>Game over</p>
             <span class="spacer"></span>
-            <p><strong>{{ room().configuration.gameOverPointThreshold }}</strong></p>
+            <p><strong>{{ room().configuration.gameOverPointThreshold }} pts</strong></p>
+        </div>
+        <div class="room-info">
+            <mat-icon class="icon">attach_money</mat-icon>
+            <p>Credits</p>
+            <span class="spacer"></span>
+            <p><strong>{{ room().configuration.creditsPerPoint | money:"noSign" }}/pt.</strong></p>
         </div>
     </mat-card-content>
     <span class="spacer"></span>
