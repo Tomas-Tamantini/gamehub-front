@@ -24,4 +24,9 @@ export interface GameStateMessage {
     payload: GameState;
 }
 
-export type Message = ErrorMessage | GameRoomUpdateMessage | GameStateMessage;
+export interface TurnTimerAlertMessage {
+    messageType: "TURN_TIMER_ALERT";
+    payload: { roomId: number, playerId: string, secondsRemaining: number };
+}
+
+export type Message = ErrorMessage | GameRoomUpdateMessage | GameStateMessage | TurnTimerAlertMessage;

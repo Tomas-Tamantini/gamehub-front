@@ -96,6 +96,10 @@ export class GameRoomComponent implements OnInit, OnDestroy {
           this.privateGameState.set(msg.payload.privateView);
         }
         break;
+      case "TURN_TIMER_ALERT":
+        // TODO: Display a countdown timer or progress bar instead of an alert
+        this.alertService.alertWarning(`${msg.payload.secondsRemaining} seconds remaining for ${msg.payload.playerId}`);
+        break;
     }
   }
 }
