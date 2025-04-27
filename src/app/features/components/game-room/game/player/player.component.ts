@@ -1,14 +1,15 @@
 import { Component, input } from '@angular/core';
 import { Player } from './player.model';
 import { MoneyPipe } from '../../../../../core/pipes/money.pipe';
-import { HandComponent } from "./hand/hand.component";
-import { HandHistoryComponent } from "./hand-history/hand-history.component";
+import { HandComponent } from './hand/hand.component';
+import { HandHistoryComponent } from './hand-history/hand-history.component';
+import { TurnTimerComponent } from './turn-timer/turn-timer.component';
 
 @Component({
   selector: 'app-player',
-  imports: [MoneyPipe, HandComponent, HandHistoryComponent],
+  imports: [MoneyPipe, HandComponent, HandHistoryComponent, TurnTimerComponent],
   templateUrl: './player.component.html',
-  styleUrl: './player.component.scss'
+  styleUrl: './player.component.scss',
 })
 export class PlayerComponent {
   player = input.required<Player>();
@@ -17,14 +18,11 @@ export class PlayerComponent {
     const angle = this.player().angleAroundTableDegrees;
     if (angle > 45 && angle < 135) {
       return 'top';
-    }
-    else if (angle > 135 && angle < 225) {
+    } else if (angle > 135 && angle < 225) {
       return 'left';
-    }
-    else if (angle > 225 && angle < 315) {
+    } else if (angle > 225 && angle < 315) {
       return 'bottom';
-    }
-    else {
+    } else {
       return 'right';
     }
   }

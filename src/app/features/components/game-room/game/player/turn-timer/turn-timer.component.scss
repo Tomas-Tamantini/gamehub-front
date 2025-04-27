@@ -1,0 +1,14 @@
+.progress-container {
+    width: 100%;
+    min-width: 60px;
+    height: 4px;
+    background-color: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 4px;
+    background-color: #4caf50;
+  }
+  

@@ -1,19 +1,25 @@
 <div class="player-container" [class]="containerPosition()">
-    <div class="badge-hand-container">
-        <div class="player-badge" [class.is-their-turn]="player().isTheirTurn">
-            <span class="player-id" [class.offline]="player().isOffline">
-                {{player().playerId}}
-            </span>
-            <div class="partial-results-container">
-                <span class="num-points">
-                    {{player().numPoints}} pts
-                </span>
-                <span class="money-amt" [class.negative]="player().partialCredit < 0">
-                    {{ player().partialCredit | money}}
-                </span>
-            </div>
-        </div>
-        <app-hand [numCards]="player().numCards" [cards]="player().cards"></app-hand>
+  <div class="badge-hand-container">
+    <div class="player-badge" [class.is-their-turn]="player().isTheirTurn">
+      <span class="player-id" [class.offline]="player().isOffline">
+        {{ player().playerId }}
+      </span>
+      <div class="partial-results-container">
+        <span class="num-points"> {{ player().numPoints }} pts </span>
+        <span class="money-amt" [class.negative]="player().partialCredit < 0">
+          {{ player().partialCredit | money }}
+        </span>
+      </div>
     </div>
-    <app-hand-history [history]="player().handHistory"></app-hand-history>
+    @if(player().secondsRemainingInTurn){
+    <app-turn-timer
+      [secondsRemaining]="player().secondsRemainingInTurn!"
+    ></app-turn-timer>
+    }
+    <app-hand
+      [numCards]="player().numCards"
+      [cards]="player().cards"
+    ></app-hand>
+  </div>
+  <app-hand-history [history]="player().handHistory"></app-hand-history>
 </div>
