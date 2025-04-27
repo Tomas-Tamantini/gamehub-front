@@ -1,12 +1,19 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ActivatedRoute } from '@angular/router';
-import { Message } from '../../../core/models/message.model';
+import { Message, TurnTimer } from '../../../core/models/message.model';
 import { RoomSummary } from '../../../core/models/room-summary.model';
-import { LobbyComponent } from "./lobby/lobby.component";
-import { GameComponent } from "./game/game.component";
+import { LobbyComponent } from './lobby/lobby.component';
+import { GameComponent } from './game/game.component';
 import { SharedGameState } from '../../../core/models/shared-view.model';
 import { PrivateView } from '../../../core/models/private-view.model';
 import { GameStatus } from '../../../core/models/game-status.model';
@@ -15,10 +22,10 @@ import { GameStatus } from '../../../core/models/game-status.model';
   selector: 'app-game-room',
   imports: [LobbyComponent, GameComponent],
   templateUrl: './game-room.component.html',
-  styleUrl: './game-room.component.scss'
+  styleUrl: './game-room.component.scss',
 })
 export class GameRoomComponent implements OnInit, OnDestroy {
-  private socketService = inject(WebsocketService)
+  private socketService = inject(WebsocketService);
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
   private route = inject(ActivatedRoute);
@@ -26,9 +33,10 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   roomSummary = signal<RoomSummary | null>(null);
   sharedGameState = signal<SharedGameState | null>(null);
   privateGameState = signal<PrivateView | null>(null);
+  turnTimer = signal<TurnTimer | null>(null);
 
   public gameHasStarted = computed(() => {
-    return !!(this.roomSummary()?.isFull && this.sharedGameState())
+    return !!(this.roomSummary()?.isFull && this.sharedGameState());
   });
 
   public isInLobby = computed(() => {
@@ -46,24 +54,28 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.socketService.connect(this.authService.getPlayerId());
     this.socketService.subcribeOnError(() => {
-      this.alertService.alertError("Could not connect to server");
+      this.alertService.alertError('Could not connect to server');
     });
-    this.socketService.subscribeOnMessage(msg => this.handleMessage(msg as Message));
+    this.socketService.subscribeOnMessage((msg) =>
+      this.handleMessage(msg as Message)
+    );
     this.sendInitialRequest(this.action());
   }
 
   private sendInitialRequest(action: string | null) {
     const requestTypeMap = {
-      join: "JOIN_GAME_BY_ID",
-      rejoin: "REJOIN_GAME",
-      watch: "WATCH_GAME"
-    }
+      join: 'JOIN_GAME_BY_ID',
+      rejoin: 'REJOIN_GAME',
+      watch: 'WATCH_GAME',
+    };
     if (!action || !(action in requestTypeMap)) {
       this.alertService.alertError(`Invalid action: ${action}`);
-    }
-    else {
+    } else {
       const requestType = requestTypeMap[action as keyof typeof requestTypeMap];
-      this.socketService.send({ requestType, payload: { roomId: this.roomId() } });
+      this.socketService.send({
+        requestType,
+        payload: { roomId: this.roomId() },
+      });
     }
   }
 
@@ -73,32 +85,32 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
   handleMessage(msg: Message) {
     switch (msg.messageType) {
-      case "ERROR":
-        if (msg.payload.error === "Player already in room") {
-          this.sendInitialRequest("rejoin");
-        }
-        else {
+      case 'ERROR':
+        if (msg.payload.error === 'Player already in room') {
+          this.sendInitialRequest('rejoin');
+        } else {
           this.alertService.alertError(msg.payload.error);
         }
         break;
-      case "GAME_ROOM_UPDATE":
+      case 'GAME_ROOM_UPDATE':
         this.roomSummary.set(msg.payload);
+        this.turnTimer.set(null);
         break;
-      case "GAME_STATE":
+      case 'GAME_STATE':
         if (msg.payload.sharedView) {
           this.sharedGameState.set(msg.payload.sharedView);
           if (msg.payload.sharedView.status === GameStatus.END_GAME) {
-            this.alertService.alertWarning("Game over!");
+            this.alertService.alertWarning('Game over!');
             this.privateGameState.set(null);
           }
         }
         if (msg.payload.privateView) {
           this.privateGameState.set(msg.payload.privateView);
         }
+        this.turnTimer.set(null);
         break;
-      case "TURN_TIMER_ALERT":
-        // TODO: Display a countdown timer or progress bar instead of an alert
-        this.alertService.alertWarning(`${msg.payload.secondsRemaining} seconds remaining for ${msg.payload.playerId}`);
+      case 'TURN_TIMER_ALERT':
+        this.turnTimer.set(msg.payload);
         break;
     }
   }
