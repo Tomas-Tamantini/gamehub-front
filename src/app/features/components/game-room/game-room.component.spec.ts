@@ -208,19 +208,6 @@ describe('GameRoomComponent', () => {
       expect(component.turnTimer()).toBeNull();
     });
 
-    it('should reset timer on GAME_ROOM_UPDATE message', () => {
-      component.turnTimer.set({
-        playerId: 'Alice',
-        secondsRemaining: 10,
-      } as TurnTimer);
-      const mockSummary = { roomId: 123 } as RoomSummary;
-      component.handleMessage({
-        messageType: 'GAME_ROOM_UPDATE',
-        payload: mockSummary,
-      });
-      expect(component.turnTimer()).toBeNull();
-    });
-
     it('should update timer on TURN_TIMER_ALERT message', () => {
       const timer = { playerId: 'Alice', secondsRemaining: 10 } as TurnTimer;
       component.handleMessage({

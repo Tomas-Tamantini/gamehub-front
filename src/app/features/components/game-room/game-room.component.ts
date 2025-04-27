@@ -94,7 +94,6 @@ export class GameRoomComponent implements OnInit, OnDestroy {
         break;
       case 'GAME_ROOM_UPDATE':
         this.roomSummary.set(msg.payload);
-        this.turnTimer.set(null);
         break;
       case 'GAME_STATE':
         if (msg.payload.sharedView) {
