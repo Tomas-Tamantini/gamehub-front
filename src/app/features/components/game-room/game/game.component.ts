@@ -81,7 +81,7 @@ export class GameComponent {
           cards: move.cards,
           isHandToBeat: move.cards == handToBeat,
         }));
-      let secondsRemainingInTurn: number | undefined =
+      const secondsRemainingInTurn: number | undefined =
         this.turnTimer()?.playerId === playerId
           ? this.turnTimer()?.secondsRemaining
           : undefined;
