@@ -14,6 +14,12 @@ export interface ErrorMessage {
     payload: { error: string };
 }
 
+export interface TurnTimer {
+    roomId: number;
+    playerId: string;
+    secondsRemaining: number;
+}
+
 export interface GameRoomUpdateMessage {
     messageType: "GAME_ROOM_UPDATE";
     payload: RoomSummary;
@@ -26,7 +32,7 @@ export interface GameStateMessage {
 
 export interface TurnTimerAlertMessage {
     messageType: "TURN_TIMER_ALERT";
-    payload: { roomId: number, playerId: string, secondsRemaining: number };
+    payload: TurnTimer;
 }
 
 export type Message = ErrorMessage | GameRoomUpdateMessage | GameStateMessage | TurnTimerAlertMessage;
