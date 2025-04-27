@@ -24,30 +24,49 @@ describe('TurnTimerComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('barColor', () => {
+    it('should return green when currentWidthPercent is greater than 25', () => {
+      componentRef.setInput('secondsRemaining', 30);
+      component.ngOnInit();
+      expect(component.barColor()).toBe('#43a047');
+    });
+
+    it('should return red when currentWidthPercent is less than or equal to 25', () => {
+      componentRef.setInput('secondsRemaining', 5);
+      component.ngOnInit();
+      expect(component.barColor()).toBe('#e53935');
+    });
+  });
+
   describe('widthPercent', () => {
     it('should return 0 when secondsRemaining is negative', () => {
       componentRef.setInput('secondsRemaining', -1);
-      expect(component.initialWidthPercent()).toBe(0);
+      component.ngOnInit();
+      expect(component.currentWidthPercent()).toBe(0);
     });
 
     it('should return 0 when secondsRemaining is 0', () => {
       componentRef.setInput('secondsRemaining', 0);
-      expect(component.initialWidthPercent()).toBe(0);
+      component.ngOnInit();
+      expect(component.currentWidthPercent()).toBe(0);
     });
 
     it('should return 100 when secondsRemaining is 30', () => {
       componentRef.setInput('secondsRemaining', 30);
-      expect(component.initialWidthPercent()).toBe(100);
+      component.ngOnInit();
+      expect(component.currentWidthPercent()).toBe(100);
     });
 
     it('should return 100 when secondsRemaining is larger than 30', () => {
       componentRef.setInput('secondsRemaining', 31);
-      expect(component.initialWidthPercent()).toBe(100);
+      component.ngOnInit();
+      expect(component.currentWidthPercent()).toBe(100);
     });
 
     it('should return a value between 0 and 100 when secondsRemaining is between 0 and 30', () => {
       componentRef.setInput('secondsRemaining', 12);
-      expect(component.initialWidthPercent()).toBe(40);
+      component.ngOnInit();
+      expect(component.currentWidthPercent()).toBe(40);
     });
   });
 });

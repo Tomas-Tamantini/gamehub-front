@@ -1,3 +1,7 @@
 <div class="progress-container">
-  <div class="progress-fill" [style.width.%]="initialWidthPercent()"></div>
+  <div
+    class="progress-fill"
+    [style.width.%]="currentWidthPercent()"
+    [style.backgroundColor]="barColor()"
+  ></div>
 </div>
