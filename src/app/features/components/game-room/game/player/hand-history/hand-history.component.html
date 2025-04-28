@@ -1,17 +1,31 @@
 <div class="history-container">
-    @for (hand of handsToDisplay(); track $index; let last=$last) {
-    @if (hand.cards.length > 0) {
-    <div class="hand-container" [class.hand-to-beat]="hand.isHandToBeat">
-        @for (card of hand.cards; track $index) {
-        <div class="card" [class.from-previous-rounds]="!last" [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
-            [class.black-suit]="card.suit === 'c' || card.suit === 's'">
-            {{card.rank}}{{card.suit | suit}}
-        </div>
-        }
+  @for (hand of handsToDisplay(); track $index; let last=$last) { @if
+  (hand.cards.length > 0) {
+  <div
+    class="hand-container"
+    [class.hand-to-beat]="hand.isHandToBeat"
+    [matBadge]="hand.isBotMove ? 'smart_toy' : ''"
+    matBadgeOverlap="false"
+  >
+    @for (card of hand.cards; track $index) {
+    <div
+      class="card"
+      [class.from-previous-rounds]="!last"
+      [class.red-suit]="card.suit === 'd' || card.suit === 'h'"
+      [class.black-suit]="card.suit === 'c' || card.suit === 's'"
+    >
+      {{ card.rank }}{{ card.suit | suit }}
     </div>
     }
-    @else {
-    <span class="pass-msg" [class.from-previous-rounds]="!last">Pass</span>
-    }
-    }
+  </div>
+  } @else {
+  <div
+    class="pass-msg"
+    [class.from-previous-rounds]="!last"
+    [matBadge]="hand.isBotMove ? 'smart_toy' : ''"
+    matBadgeOverlap="false"
+  >
+    Pass
+  </div>
+  } }
 </div>
