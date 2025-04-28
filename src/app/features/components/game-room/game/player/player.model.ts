@@ -3,6 +3,7 @@ import { Card } from '../../../../../core/models/card.model';
 export interface Hand {
   cards: Card[];
   isHandToBeat: boolean;
+  isBotMove: boolean;
 }
 
 export interface Player {

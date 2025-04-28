@@ -80,6 +80,7 @@ export class GameComponent {
         .map((move) => ({
           cards: move.cards,
           isHandToBeat: move.cards == handToBeat,
+          isBotMove: move.isBotMove,
         }));
       const secondsRemainingInTurn: number | undefined =
         this.turnTimer()?.playerId === playerId

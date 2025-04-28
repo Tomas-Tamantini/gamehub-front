@@ -108,14 +108,30 @@ describe('GameComponent', () => {
         ],
         currentPlayerId: 'Bob',
         moveHistory: [
-          { playerId: 'Bob', cards: [{ rank: 'A', suit: 'd' }] },
-          { playerId: 'Charlie', cards: [] },
-          { playerId: 'Diana', cards: [{ rank: '2', suit: 'd' }] },
-          { playerId: 'Alice', cards: [{ rank: '2', suit: 'h' }] },
-          { playerId: 'Bob', cards: [] },
-          { playerId: 'Charlie', cards: [] },
-          { playerId: 'Diana', cards: [{ rank: '2', suit: 's' }] },
-          { playerId: 'Alice', cards: [] },
+          {
+            playerId: 'Bob',
+            cards: [{ rank: 'A', suit: 'd' }],
+            isBotMove: false,
+          },
+          { playerId: 'Charlie', cards: [], isBotMove: true },
+          {
+            playerId: 'Diana',
+            cards: [{ rank: '2', suit: 'd' }],
+            isBotMove: false,
+          },
+          {
+            playerId: 'Alice',
+            cards: [{ rank: '2', suit: 'h' }],
+            isBotMove: false,
+          },
+          { playerId: 'Bob', cards: [], isBotMove: false },
+          { playerId: 'Charlie', cards: [], isBotMove: false },
+          {
+            playerId: 'Diana',
+            cards: [{ rank: '2', suit: 's' }],
+            isBotMove: false,
+          },
+          { playerId: 'Alice', cards: [], isBotMove: false },
         ],
       });
     });
@@ -202,20 +218,36 @@ describe('GameComponent', () => {
 
     it('should map hand history', () => {
       const aliceHistory: Hand[] = [
-        { isHandToBeat: false, cards: [{ rank: '2', suit: 'h' }] },
-        { isHandToBeat: false, cards: [] },
+        {
+          isHandToBeat: false,
+          cards: [{ rank: '2', suit: 'h' }],
+          isBotMove: false,
+        },
+        { isHandToBeat: false, cards: [], isBotMove: false },
       ];
       const bobHistory: Hand[] = [
-        { isHandToBeat: false, cards: [{ rank: 'A', suit: 'd' }] },
-        { isHandToBeat: false, cards: [] },
+        {
+          isHandToBeat: false,
+          cards: [{ rank: 'A', suit: 'd' }],
+          isBotMove: false,
+        },
+        { isHandToBeat: false, cards: [], isBotMove: false },
       ];
       const charlieHistory: Hand[] = [
-        { isHandToBeat: false, cards: [] },
-        { isHandToBeat: false, cards: [] },
+        { isHandToBeat: false, cards: [], isBotMove: true },
+        { isHandToBeat: false, cards: [], isBotMove: false },
       ];
       const dianaHistory: Hand[] = [
-        { isHandToBeat: false, cards: [{ rank: '2', suit: 'd' }] },
-        { isHandToBeat: true, cards: [{ rank: '2', suit: 's' }] },
+        {
+          isHandToBeat: false,
+          cards: [{ rank: '2', suit: 'd' }],
+          isBotMove: false,
+        },
+        {
+          isHandToBeat: true,
+          cards: [{ rank: '2', suit: 's' }],
+          isBotMove: false,
+        },
       ];
 
       const computed = component.players();

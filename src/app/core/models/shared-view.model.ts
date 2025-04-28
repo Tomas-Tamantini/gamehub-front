@@ -1,22 +1,22 @@
-import { Card } from "./card.model";
-import { GameStatus } from "./game-status.model";
+import { Card } from './card.model';
+import { GameStatus } from './game-status.model';
 
 export interface SharedPlayerState {
-    playerId: string;
-    numPoints: number;
-    numCards: number;
-    partialCredits: number;
+  playerId: string;
+  numPoints: number;
+  numCards: number;
+  partialCredits: number;
 }
 
 export interface Move {
-    playerId: string;
-    cards: Card[];
+  playerId: string;
+  cards: Card[];
+  isBotMove: boolean;
 }
 
 export interface SharedGameState {
-    status: GameStatus;
-    currentPlayerId?: string;
-    players: SharedPlayerState[];
-    moveHistory: Move[];
+  status: GameStatus;
+  currentPlayerId?: string;
+  players: SharedPlayerState[];
+  moveHistory: Move[];
 }
-
