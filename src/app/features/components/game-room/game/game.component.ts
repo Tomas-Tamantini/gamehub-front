@@ -40,6 +40,7 @@ export class GameComponent implements OnChanges {
 
   isMyTurn = computed(
     () =>
+      this.sharedGameState().status === GameStatus.AWAIT_PLAYER_ACTION &&
       this.sharedGameState().currentPlayerId === this.authService.getPlayerId()
   );
 

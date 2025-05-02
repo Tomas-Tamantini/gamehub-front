@@ -84,12 +84,33 @@ describe('GameComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should indicate whether it is the players turn', () => {
-    authServiceSpy.getPlayerId.and.returnValue('Bob');
-    componentRef.setInput('sharedGameState', { currentPlayerId: 'Bob' });
-    expect(component.isMyTurn()).toBeTrue();
-    componentRef.setInput('sharedGameState', { currentPlayerId: 'Alice' });
-    expect(component.isMyTurn()).toBeFalse();
+  describe('players turn', () => {
+    it('should not be players turn if current player is not the user', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Alice');
+      componentRef.setInput('sharedGameState', {
+        currentPlayerId: 'Bob',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+      });
+      expect(component.isMyTurn()).toBeFalse();
+    });
+
+    it('should not be players turn if status is not AWAIT_PLAYER_ACTION', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Alice');
+      componentRef.setInput('sharedGameState', {
+        currentPlayerId: 'Alice',
+        status: GameStatus.START_TURN,
+      });
+      expect(component.isMyTurn()).toBeFalse();
+    });
+
+    it('should be players turn if current player is the user and status is AWAIT_PLAYER_ACTION', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Alice');
+      componentRef.setInput('sharedGameState', {
+        currentPlayerId: 'Alice',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+      });
+      expect(component.isMyTurn()).toBeTrue();
+    });
   });
 
   it('should indicate whether no card has been selected', () => {

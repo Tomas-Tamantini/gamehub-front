@@ -18,14 +18,14 @@
         Play
       </button>
     </div>
-    } @if(canAutoPass()){
+    } @else if(canAutoPass()){
     <div class="action-area">
       <mat-checkbox
         [checked]="autoPassSelected()"
         (change)="autoPassSelected.set($event.checked)"
       >
-        Pass</mat-checkbox
-      >
+        Pass
+      </mat-checkbox>
     </div>
     }
   </div>
