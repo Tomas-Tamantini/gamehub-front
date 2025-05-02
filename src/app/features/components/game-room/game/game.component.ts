@@ -65,7 +65,7 @@ export class GameComponent {
       );
       const numPoints = player?.numPoints ?? 0;
       const numCards = player?.numCards ?? 0;
-      const offset = (index - currentPlayerIdx + 4) % 4;
+      const offset = (index - currentPlayerIdx + numPlayers) % numPlayers;
       const angleAroundTableDegrees = GameComponent.playerAngle(
         offset,
         numPlayers
@@ -82,7 +82,7 @@ export class GameComponent {
           isHandToBeat: move.cards == handToBeat,
           isBotMove: move.isBotMove,
         }));
-      const secondsRemainingInTurn: number | undefined =
+      const secondsRemainingInTurn =
         this.turnTimer()?.playerId === playerId
           ? this.turnTimer()?.secondsRemaining
           : undefined;
