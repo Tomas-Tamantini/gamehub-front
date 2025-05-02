@@ -55,10 +55,6 @@ export class GameComponent {
     const myId = this.authService.getPlayerId();
     const numPlayers = this.roomInfo().playerIds.length;
     const currentPlayerIdx = myId ? this.getPlayerIndex(myId) : 0;
-    const handToBeat = this.sharedGameState()
-      .moveHistory.slice()
-      .reverse()
-      .find((move) => move.cards.length > 0)?.cards;
     return this.roomInfo().playerIds.map((playerId, index) => {
       const player = this.sharedGameState().players.find(
         (player) => player.playerId === playerId
@@ -75,13 +71,12 @@ export class GameComponent {
       const isTheirTurn = playerId === this.sharedGameState().currentPlayerId;
       const cards =
         playerId === myId ? this.privateGameState()?.cards : undefined;
-      const handHistory = this.sharedGameState()
-        .moveHistory.filter((move) => move.playerId === playerId)
-        .map((move) => ({
-          cards: move.cards,
-          isHandToBeat: move.cards == handToBeat,
-          isBotMove: move.isBotMove,
-        }));
+      const handHistory = Array.from(
+        this.gameplayService.playerHandHistory(
+          playerId,
+          this.sharedGameState().moveHistory
+        )
+      );
       const secondsRemainingInTurn =
         this.turnTimer()?.playerId === playerId
           ? this.turnTimer()?.secondsRemaining

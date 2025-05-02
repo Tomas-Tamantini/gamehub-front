@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SharedGameState } from '../models/shared-view.model';
+import { Move, SharedGameState } from '../models/shared-view.model';
+import { Hand } from '../../features/components/game-room/game/player/player.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,25 @@ export class GameplayService {
     return gameState.players.findIndex(
       (player) => player.playerId === playerId
     );
+  }
+
+  private indexOfHandToBeat(moveHistory: Move[]) {
+    for (let i = moveHistory.length - 1; i >= 0; i--)
+      if (moveHistory[i].cards.length > 0) return i;
+    return -1;
+  }
+
+  *playerHandHistory(playerId: string, moveHistory: Move[]): Generator<Hand> {
+    const idxOfHandToBeat = this.indexOfHandToBeat(moveHistory);
+    for (const [idx, move] of moveHistory.entries()) {
+      if (move.playerId === playerId) {
+        yield {
+          cards: move.cards,
+          isHandToBeat: idx === idxOfHandToBeat,
+          isBotMove: move.isBotMove,
+        };
+      }
+    }
   }
 
   willStillPlayThisMatch(

@@ -36,6 +36,7 @@ describe('GameComponent', () => {
           provide: GameplayService,
           useValue: jasmine.createSpyObj('GameplayService', [
             'willStillPlayThisMatch',
+            'playerHandHistory',
           ]),
         },
         {
@@ -55,6 +56,12 @@ describe('GameComponent', () => {
     gameplayServiceSpy = TestBed.inject(
       GameplayService
     ) as jasmine.SpyObj<GameplayService>;
+    const mockGenerator = function* () {
+      yield* [];
+    };
+    gameplayServiceSpy.playerHandHistory = jasmine
+      .createSpy()
+      .and.callFake(mockGenerator);
     cardsServiceSpy = TestBed.inject(
       CardsService
     ) as jasmine.SpyObj<CardsService>;
@@ -117,32 +124,6 @@ describe('GameComponent', () => {
       { playerId: 'Alice', numPoints: 1, numCards: 3, partialCredits: 1 },
     ],
     currentPlayerId: 'Bob',
-    moveHistory: [
-      {
-        playerId: 'Bob',
-        cards: [{ rank: 'A', suit: 'd' }],
-        isBotMove: false,
-      },
-      { playerId: 'Charlie', cards: [], isBotMove: true },
-      {
-        playerId: 'Diana',
-        cards: [{ rank: '2', suit: 'd' }],
-        isBotMove: false,
-      },
-      {
-        playerId: 'Alice',
-        cards: [{ rank: '2', suit: 'h' }],
-        isBotMove: false,
-      },
-      { playerId: 'Bob', cards: [], isBotMove: false },
-      { playerId: 'Charlie', cards: [], isBotMove: false },
-      {
-        playerId: 'Diana',
-        cards: [{ rank: '2', suit: 's' }],
-        isBotMove: false,
-      },
-      { playerId: 'Alice', cards: [], isBotMove: false },
-    ],
   } as SharedGameState;
 
   describe('computed players', () => {
@@ -237,33 +218,27 @@ describe('GameComponent', () => {
           cards: [{ rank: '2', suit: 'h' }],
           isBotMove: false,
         },
-        { isHandToBeat: false, cards: [], isBotMove: false },
       ];
       const bobHistory: Hand[] = [
-        {
-          isHandToBeat: false,
-          cards: [{ rank: 'A', suit: 'd' }],
-          isBotMove: false,
-        },
         { isHandToBeat: false, cards: [], isBotMove: false },
       ];
       const charlieHistory: Hand[] = [
         { isHandToBeat: false, cards: [], isBotMove: true },
-        { isHandToBeat: false, cards: [], isBotMove: false },
       ];
       const dianaHistory: Hand[] = [
-        {
-          isHandToBeat: false,
-          cards: [{ rank: '2', suit: 'd' }],
-          isBotMove: false,
-        },
         {
           isHandToBeat: true,
           cards: [{ rank: '2', suit: 's' }],
           isBotMove: false,
         },
       ];
-
+      const mockHistoryGenerator = function* (playerId: string) {
+        if (playerId === 'Alice') yield* aliceHistory;
+        else if (playerId === 'Bob') yield* bobHistory;
+        else if (playerId === 'Charlie') yield* charlieHistory;
+        else if (playerId === 'Diana') yield* dianaHistory;
+      };
+      gameplayServiceSpy.playerHandHistory.and.callFake(mockHistoryGenerator);
       const computed = component.players();
       const computedHistory = computed.map((player) => player.handHistory);
       expect(computedHistory).toEqual([

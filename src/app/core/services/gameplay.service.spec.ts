@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { GameplayService } from './gameplay.service';
-import { SharedGameState } from '../models/shared-view.model';
+import { Move, SharedGameState } from '../models/shared-view.model';
+import { Hand } from '../../features/components/game-room/game/player/player.model';
 
 describe('GameplayService', () => {
   let service: GameplayService;
@@ -13,6 +14,59 @@ describe('GameplayService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('playerHandHistory', () => {
+    const moveHistory: Move[] = [
+      {
+        playerId: 'Alice',
+        cards: [{ rank: '3', suit: 'h' }],
+        isBotMove: false,
+      },
+      { playerId: 'Bob', cards: [], isBotMove: true },
+      {
+        playerId: 'Charlie',
+        cards: [{ rank: '5', suit: 'c' }],
+        isBotMove: false,
+      },
+      {
+        playerId: 'Diana',
+        cards: [{ rank: '6', suit: 'h' }],
+        isBotMove: false,
+      },
+      { playerId: 'Alice', cards: [], isBotMove: true },
+    ];
+
+    it('should return hand history for given player', () => {
+      const playerId = 'Alice';
+      const expectedHistory: Hand[] = [
+        {
+          cards: [{ rank: '3', suit: 'h' }],
+          isHandToBeat: false,
+          isBotMove: false,
+        },
+        {
+          cards: [],
+          isHandToBeat: false,
+          isBotMove: true,
+        },
+      ];
+      const result = service.playerHandHistory(playerId, moveHistory);
+      expect(Array.from(result)).toEqual(expectedHistory);
+    });
+
+    it('should assign last non-pass move as hand to beat', () => {
+      const playerId = 'Diana';
+      const expectedHistory: Hand[] = [
+        {
+          cards: [{ rank: '6', suit: 'h' }],
+          isHandToBeat: true,
+          isBotMove: false,
+        },
+      ];
+      const result = service.playerHandHistory(playerId, moveHistory);
+      expect(Array.from(result)).toEqual(expectedHistory);
+    });
   });
 
   describe('willStillPlayThisMatch', () => {
