@@ -111,4 +111,33 @@ describe('GameplayService', () => {
       expect(result).toBe(true);
     });
   });
+
+  describe('angles around table', () => {
+    it('should place players evenly spaced around the table seated clockwise', () => {
+      const playerIds = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank'];
+      const expectedAngles = {
+        Alice: 270,
+        Bob: 210,
+        Charlie: 150,
+        Diana: 90,
+        Eve: 30,
+        Frank: 330,
+      };
+      const result = service.anglesAroundTableDegrees(playerIds);
+      expect(result).toEqual(expectedAngles);
+    });
+
+    it('should place logged player at the bottom of the table', () => {
+      const myId = 'Bob';
+      const playerIds = ['Alice', 'Bob', 'Charlie', 'Diana'];
+      const expectedAngles = {
+        Alice: 0,
+        Bob: 270,
+        Charlie: 180,
+        Diana: 90,
+      };
+      const result = service.anglesAroundTableDegrees(playerIds, myId);
+      expect(result).toEqual(expectedAngles);
+    });
+  });
 });

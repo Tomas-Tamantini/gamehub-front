@@ -66,4 +66,19 @@ export class GameplayService {
     });
     return playersBetween.every((player) => player.numCards > 0);
   }
+
+  anglesAroundTableDegrees(
+    playerIds: string[],
+    myId?: string
+  ): Record<string, number> {
+    const numPlayers = playerIds.length;
+    const angles: Record<string, number> = {};
+    const myIdx = myId ? playerIds.indexOf(myId) : 0;
+    playerIds.forEach((playerId, index) => {
+      const offset = (index - myIdx + numPlayers) % numPlayers;
+      angles[playerId] =
+        ((90 * (7 * numPlayers - 4 * offset)) / numPlayers) % 360;
+    });
+    return angles;
+  }
 }

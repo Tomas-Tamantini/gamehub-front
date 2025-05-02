@@ -46,26 +46,20 @@ export class GameComponent {
     this.gameService.makeMove(roomId, selectedCards);
   }
 
-  private static playerAngle(offset: number, numPlayers: number): number {
-    const angle = (90 * (7 * numPlayers - 4 * offset)) / numPlayers;
-    return angle % 360;
-  }
-
   players = computed<Player[]>(() => {
     const myId = this.authService.getPlayerId();
-    const numPlayers = this.roomInfo().playerIds.length;
-    const currentPlayerIdx = myId ? this.getPlayerIndex(myId) : 0;
-    return this.roomInfo().playerIds.map((playerId, index) => {
-      const player = this.sharedGameState().players.find(
-        (player) => player.playerId === playerId
-      );
+    const playerIds = this.sharedGameState().players.map(
+      (player) => player.playerId
+    );
+    const angles = this.gameplayService.anglesAroundTableDegrees(
+      playerIds,
+      myId
+    );
+    return this.sharedGameState().players.map((player) => {
+      const playerId = player.playerId;
       const numPoints = player?.numPoints ?? 0;
       const numCards = player?.numCards ?? 0;
-      const offset = (index - currentPlayerIdx + numPlayers) % numPlayers;
-      const angleAroundTableDegrees = GameComponent.playerAngle(
-        offset,
-        numPlayers
-      );
+      const angleAroundTableDegrees = angles[playerId];
       const partialCredit = player?.partialCredits ?? 0;
       const isOffline = this.roomInfo().offlinePlayers.includes(playerId);
       const isTheirTurn = playerId === this.sharedGameState().currentPlayerId;
@@ -103,10 +97,6 @@ export class GameComponent {
     const y = Math.floor(-50 * Math.sin(angle) + 50);
 
     return `top: ${y}%; left: ${x}%;`;
-  }
-
-  private getPlayerIndex(playerId: string): number {
-    return this.roomInfo().playerIds.findIndex((id) => id === playerId);
   }
 
   canAutoPass(): boolean {

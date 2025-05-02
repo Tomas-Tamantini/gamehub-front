@@ -37,6 +37,7 @@ describe('GameComponent', () => {
           useValue: jasmine.createSpyObj('GameplayService', [
             'willStillPlayThisMatch',
             'playerHandHistory',
+            'anglesAroundTableDegrees',
           ]),
         },
         {
@@ -118,10 +119,10 @@ describe('GameComponent', () => {
 
   const mockSharedState = {
     players: [
+      { playerId: 'Alice', numPoints: 1, numCards: 3, partialCredits: 1 },
       { playerId: 'Bob', numPoints: 2, numCards: 6, partialCredits: 0 },
       { playerId: 'Charlie', numPoints: 3, numCards: 9, partialCredits: 0 },
       { playerId: 'Diana', numPoints: 4, numCards: 12, partialCredits: -1 },
-      { playerId: 'Alice', numPoints: 1, numCards: 3, partialCredits: 1 },
     ],
     currentPlayerId: 'Bob',
   } as SharedGameState;
@@ -129,6 +130,12 @@ describe('GameComponent', () => {
   describe('computed players', () => {
     beforeEach(() => {
       componentRef.setInput('sharedGameState', mockSharedState);
+      gameplayServiceSpy.anglesAroundTableDegrees.and.returnValue({
+        Alice: 0,
+        Bob: 270,
+        Charlie: 180,
+        Diana: 90,
+      });
     });
 
     it('should map player Ids', () => {
@@ -167,21 +174,17 @@ describe('GameComponent', () => {
       expect(computedOffline).toEqual([false, true, false, false]);
     });
 
-    it('should seat players clockwise', () => {
-      const computed = component.players();
-      const computedAngles = computed.map(
-        (player) => player.angleAroundTableDegrees
-      );
-      expect(computedAngles).toEqual([270, 180, 90, 0]);
-    });
-
-    it('should place player at bottom of the table if they are logged in', () => {
+    it('should place players at proper angles', () => {
       authServiceSpy.getPlayerId.and.returnValue('Bob');
       const computed = component.players();
       const computedAngles = computed.map(
         (player) => player.angleAroundTableDegrees
       );
       expect(computedAngles).toEqual([0, 270, 180, 90]);
+      expect(gameplayServiceSpy.anglesAroundTableDegrees).toHaveBeenCalledWith(
+        ['Alice', 'Bob', 'Charlie', 'Diana'],
+        'Bob'
+      );
     });
 
     it('should map players private cards', () => {
