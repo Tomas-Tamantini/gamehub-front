@@ -8,6 +8,7 @@ import { PrivateView } from '../../../../core/models/private-view.model';
 import { GameService } from '../../../../core/services/game.service';
 import { CardsService } from '../../../../core/services/cards.service';
 import { TurnTimer } from '../../../../core/models/message.model';
+import { GameplayService } from '../../../../core/services/gameplay.service';
 
 @Component({
   selector: 'app-game',
@@ -22,6 +23,7 @@ export class GameComponent {
   roomInfo = input.required<RoomSummary>();
   authService = inject(AuthService);
   gameService = inject(GameService);
+  gameplayService = inject(GameplayService);
   cardsService = inject(CardsService);
 
   isMyTurn = computed(
@@ -112,27 +114,13 @@ export class GameComponent {
     return this.roomInfo().playerIds.findIndex((id) => id === playerId);
   }
 
-  private willStillPlay(currentPlayerId: string, myId: string): boolean {
-    const myIndex = this.getPlayerIndex(myId);
-    const currentPlayerIndex = this.getPlayerIndex(currentPlayerId);
-    const indicesBetween: number[] = [];
-    const numPlayers = this.sharedGameState().players.length;
-    for (let i = 1; i <= numPlayers; i++) {
-      const index = (currentPlayerIndex + i) % numPlayers;
-      indicesBetween.push(index);
-      if (index === myIndex) break;
-    }
-    const playersBetween = indicesBetween.map((index) => {
-      return this.sharedGameState().players[index];
-    });
-    return playersBetween.every((player) => player.numCards > 0);
-  }
-
   canAutoPass(): boolean {
     const myId = this.authService.getPlayerId();
-    if (!this.roomInfo().playerIds.includes(myId)) return false;
     const currentPlayerId = this.sharedGameState().currentPlayerId;
-    if (!currentPlayerId || currentPlayerId == myId) return false;
-    return this.willStillPlay(currentPlayerId, myId);
+    if (currentPlayerId == myId) return false;
+    return this.gameplayService.willStillPlayThisMatch(
+      myId,
+      this.sharedGameState()
+    );
   }
 }

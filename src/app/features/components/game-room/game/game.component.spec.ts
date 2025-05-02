@@ -8,6 +8,8 @@ import { GameService } from '../../../../core/services/game.service';
 import { CardsService } from '../../../../core/services/cards.service';
 import { Hand } from './player/player.model';
 import { TurnTimer } from '../../../../core/models/message.model';
+import { GameplayService } from '../../../../core/services/gameplay.service';
+import { SharedGameState } from '../../../../core/models/shared-view.model';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -15,6 +17,7 @@ describe('GameComponent', () => {
   let fixture: ComponentFixture<GameComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let gameServiceSpy: jasmine.SpyObj<GameService>;
+  let gameplayServiceSpy: jasmine.SpyObj<GameplayService>;
   let cardsServiceSpy: jasmine.SpyObj<CardsService>;
 
   beforeEach(async () => {
@@ -30,6 +33,12 @@ describe('GameComponent', () => {
           useValue: jasmine.createSpyObj('GameService', ['makeMove']),
         },
         {
+          provide: GameplayService,
+          useValue: jasmine.createSpyObj('GameplayService', [
+            'willStillPlayThisMatch',
+          ]),
+        },
+        {
           provide: CardsService,
           useValue: jasmine.createSpyObj('CardsService', [
             'selectedCards',
@@ -43,6 +52,9 @@ describe('GameComponent', () => {
     fixture = TestBed.createComponent(GameComponent);
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     gameServiceSpy = TestBed.inject(GameService) as jasmine.SpyObj<GameService>;
+    gameplayServiceSpy = TestBed.inject(
+      GameplayService
+    ) as jasmine.SpyObj<GameplayService>;
     cardsServiceSpy = TestBed.inject(
       CardsService
     ) as jasmine.SpyObj<CardsService>;
@@ -131,7 +143,7 @@ describe('GameComponent', () => {
       },
       { playerId: 'Alice', cards: [], isBotMove: false },
     ],
-  };
+  } as SharedGameState;
 
   describe('computed players', () => {
     beforeEach(() => {
@@ -264,74 +276,32 @@ describe('GameComponent', () => {
   });
 
   describe('autoPass', () => {
-    beforeEach(() => {
-      componentRef.setInput('roomInfo', {
-        playerIds: ['Bob', 'Charlie', 'Diana', 'Alice'],
-      });
-    });
-
-    it('should not allow auto pass if user is not in the game', () => {
-      authServiceSpy.getPlayerId.and.returnValue('Eve');
-      componentRef.setInput('sharedGameState', { ...mockSharedState });
-      expect(component.canAutoPass()).toBeFalse();
-    });
-
-    it('should not allow auto pass if game is not in progress', () => {
-      authServiceSpy.getPlayerId.and.returnValue('Alice');
-      componentRef.setInput('sharedGameState', {
-        ...mockSharedState,
-        currentPlayerId: undefined,
-      });
-      expect(component.canAutoPass()).toBeFalse();
-    });
-
     it('should not allow auto pass if it is users turn', () => {
       authServiceSpy.getPlayerId.and.returnValue('Bob');
-      componentRef.setInput('sharedGameState', { ...mockSharedState });
+      componentRef.setInput('sharedGameState', mockSharedState);
       expect(component.canAutoPass()).toBeFalse();
     });
 
-    it('should not allow auto pass if user has no cards', () => {
-      authServiceSpy.getPlayerId.and.returnValue('Charlie');
-      componentRef.setInput('sharedGameState', {
-        ...mockSharedState,
-        currentPlayerId: 'Diana',
-        players: [
-          { playerId: 'Bob', numCards: 10 },
-          { playerId: 'Charlie', numCards: 0 },
-          { playerId: 'Diana', numCards: 5 },
-          { playerId: 'Alice', numCards: 3 },
-        ],
-      });
-      expect(component.canAutoPass()).toBeFalse();
-    });
-
-    it('should not allow auto pass if user plays after someone with zero cards', () => {
+    it('should call gameplay service with proper arguments', () => {
       authServiceSpy.getPlayerId.and.returnValue('Diana');
-      componentRef.setInput('sharedGameState', {
-        ...mockSharedState,
-        players: [
-          { playerId: 'Bob', numCards: 10 },
-          { playerId: 'Charlie', numCards: 0 },
-          { playerId: 'Diana', numCards: 5 },
-          { playerId: 'Alice', numCards: 3 },
-        ],
-      });
+      gameplayServiceSpy.willStillPlayThisMatch.and.returnValue(false);
+      componentRef.setInput('sharedGameState', mockSharedState);
+      component.canAutoPass();
+      expect(gameplayServiceSpy.willStillPlayThisMatch).toHaveBeenCalledWith(
+        'Diana',
+        mockSharedState
+      );
+    });
+
+    it('should not allow auto pass if player will not play during match', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Diana');
+      gameplayServiceSpy.willStillPlayThisMatch.and.returnValue(false);
       expect(component.canAutoPass()).toBeFalse();
     });
 
-    it('should allow auto pass if user will still play during current match', () => {
+    it('should allow auto pass if player will still play during match', () => {
       authServiceSpy.getPlayerId.and.returnValue('Diana');
-      componentRef.setInput('sharedGameState', {
-        ...mockSharedState,
-        players: [
-          ...mockSharedState.players,
-          { playerId: 'Bob', numCards: 10 },
-          { playerId: 'Charlie', numCards: 3 },
-          { playerId: 'Diana', numCards: 5 },
-          { playerId: 'Alice', numCards: 0 },
-        ],
-      });
+      gameplayServiceSpy.willStillPlayThisMatch.and.returnValue(true);
       expect(component.canAutoPass()).toBeTrue();
     });
   });
