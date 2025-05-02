@@ -97,43 +97,45 @@ describe('GameComponent', () => {
     });
   });
 
+  const mockSharedState = {
+    players: [
+      { playerId: 'Bob', numPoints: 2, numCards: 6, partialCredits: 0 },
+      { playerId: 'Charlie', numPoints: 3, numCards: 9, partialCredits: 0 },
+      { playerId: 'Diana', numPoints: 4, numCards: 12, partialCredits: -1 },
+      { playerId: 'Alice', numPoints: 1, numCards: 3, partialCredits: 1 },
+    ],
+    currentPlayerId: 'Bob',
+    moveHistory: [
+      {
+        playerId: 'Bob',
+        cards: [{ rank: 'A', suit: 'd' }],
+        isBotMove: false,
+      },
+      { playerId: 'Charlie', cards: [], isBotMove: true },
+      {
+        playerId: 'Diana',
+        cards: [{ rank: '2', suit: 'd' }],
+        isBotMove: false,
+      },
+      {
+        playerId: 'Alice',
+        cards: [{ rank: '2', suit: 'h' }],
+        isBotMove: false,
+      },
+      { playerId: 'Bob', cards: [], isBotMove: false },
+      { playerId: 'Charlie', cards: [], isBotMove: false },
+      {
+        playerId: 'Diana',
+        cards: [{ rank: '2', suit: 's' }],
+        isBotMove: false,
+      },
+      { playerId: 'Alice', cards: [], isBotMove: false },
+    ],
+  };
+
   describe('computed players', () => {
     beforeEach(() => {
-      componentRef.setInput('sharedGameState', {
-        players: [
-          { playerId: 'Bob', numPoints: 2, numCards: 6, partialCredits: 0 },
-          { playerId: 'Charlie', numPoints: 3, numCards: 9, partialCredits: 0 },
-          { playerId: 'Diana', numPoints: 4, numCards: 12, partialCredits: -1 },
-          { playerId: 'Alice', numPoints: 1, numCards: 3, partialCredits: 1 },
-        ],
-        currentPlayerId: 'Bob',
-        moveHistory: [
-          {
-            playerId: 'Bob',
-            cards: [{ rank: 'A', suit: 'd' }],
-            isBotMove: false,
-          },
-          { playerId: 'Charlie', cards: [], isBotMove: true },
-          {
-            playerId: 'Diana',
-            cards: [{ rank: '2', suit: 'd' }],
-            isBotMove: false,
-          },
-          {
-            playerId: 'Alice',
-            cards: [{ rank: '2', suit: 'h' }],
-            isBotMove: false,
-          },
-          { playerId: 'Bob', cards: [], isBotMove: false },
-          { playerId: 'Charlie', cards: [], isBotMove: false },
-          {
-            playerId: 'Diana',
-            cards: [{ rank: '2', suit: 's' }],
-            isBotMove: false,
-          },
-          { playerId: 'Alice', cards: [], isBotMove: false },
-        ],
-      });
+      componentRef.setInput('sharedGameState', mockSharedState);
     });
 
     it('should map player Ids', () => {
@@ -258,6 +260,79 @@ describe('GameComponent', () => {
         charlieHistory,
         dianaHistory,
       ]);
+    });
+  });
+
+  describe('autoPass', () => {
+    beforeEach(() => {
+      componentRef.setInput('roomInfo', {
+        playerIds: ['Bob', 'Charlie', 'Diana', 'Alice'],
+      });
+    });
+
+    it('should not allow auto pass if user is not in the game', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Eve');
+      componentRef.setInput('sharedGameState', { ...mockSharedState });
+      expect(component.canAutoPass()).toBeFalse();
+    });
+
+    it('should not allow auto pass if game is not in progress', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Alice');
+      componentRef.setInput('sharedGameState', {
+        ...mockSharedState,
+        currentPlayerId: undefined,
+      });
+      expect(component.canAutoPass()).toBeFalse();
+    });
+
+    it('should not allow auto pass if it is users turn', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      componentRef.setInput('sharedGameState', { ...mockSharedState });
+      expect(component.canAutoPass()).toBeFalse();
+    });
+
+    it('should not allow auto pass if user has no cards', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Charlie');
+      componentRef.setInput('sharedGameState', {
+        ...mockSharedState,
+        currentPlayerId: 'Diana',
+        players: [
+          { playerId: 'Bob', numCards: 10 },
+          { playerId: 'Charlie', numCards: 0 },
+          { playerId: 'Diana', numCards: 5 },
+          { playerId: 'Alice', numCards: 3 },
+        ],
+      });
+      expect(component.canAutoPass()).toBeFalse();
+    });
+
+    it('should not allow auto pass if user plays after someone with zero cards', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Diana');
+      componentRef.setInput('sharedGameState', {
+        ...mockSharedState,
+        players: [
+          { playerId: 'Bob', numCards: 10 },
+          { playerId: 'Charlie', numCards: 0 },
+          { playerId: 'Diana', numCards: 5 },
+          { playerId: 'Alice', numCards: 3 },
+        ],
+      });
+      expect(component.canAutoPass()).toBeFalse();
+    });
+
+    it('should allow auto pass if user will still play during current match', () => {
+      authServiceSpy.getPlayerId.and.returnValue('Diana');
+      componentRef.setInput('sharedGameState', {
+        ...mockSharedState,
+        players: [
+          ...mockSharedState.players,
+          { playerId: 'Bob', numCards: 10 },
+          { playerId: 'Charlie', numCards: 3 },
+          { playerId: 'Diana', numCards: 5 },
+          { playerId: 'Alice', numCards: 0 },
+        ],
+      });
+      expect(component.canAutoPass()).toBeTrue();
     });
   });
 });

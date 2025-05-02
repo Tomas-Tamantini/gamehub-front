@@ -52,9 +52,7 @@ export class GameComponent {
   players = computed<Player[]>(() => {
     const myId = this.authService.getPlayerId();
     const numPlayers = this.roomInfo().playerIds.length;
-    const currentPlayerIdx = myId
-      ? this.roomInfo().playerIds.indexOf(this.authService.getPlayerId())
-      : 0;
+    const currentPlayerIdx = myId ? this.getPlayerIndex(myId) : 0;
     const handToBeat = this.sharedGameState()
       .moveHistory.slice()
       .reverse()
@@ -108,5 +106,33 @@ export class GameComponent {
     const y = Math.floor(-50 * Math.sin(angle) + 50);
 
     return `top: ${y}%; left: ${x}%;`;
+  }
+
+  private getPlayerIndex(playerId: string): number {
+    return this.roomInfo().playerIds.findIndex((id) => id === playerId);
+  }
+
+  private willStillPlay(currentPlayerId: string, myId: string): boolean {
+    const myIndex = this.getPlayerIndex(myId);
+    const currentPlayerIndex = this.getPlayerIndex(currentPlayerId);
+    const indicesBetween: number[] = [];
+    const numPlayers = this.sharedGameState().players.length;
+    for (let i = 1; i <= numPlayers; i++) {
+      const index = (currentPlayerIndex + i) % numPlayers;
+      indicesBetween.push(index);
+      if (index === myIndex) break;
+    }
+    const playersBetween = indicesBetween.map((index) => {
+      return this.sharedGameState().players[index];
+    });
+    return playersBetween.every((player) => player.numCards > 0);
+  }
+
+  canAutoPass(): boolean {
+    const myId = this.authService.getPlayerId();
+    if (!this.roomInfo().playerIds.includes(myId)) return false;
+    const currentPlayerId = this.sharedGameState().currentPlayerId;
+    if (!currentPlayerId || currentPlayerId == myId) return false;
+    return this.willStillPlay(currentPlayerId, myId);
   }
 }
