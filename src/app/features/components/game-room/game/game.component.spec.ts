@@ -10,6 +10,7 @@ import { Hand } from './player/player.model';
 import { TurnTimer } from '../../../../core/models/message.model';
 import { GameplayService } from '../../../../core/services/gameplay.service';
 import { SharedGameState } from '../../../../core/models/shared-view.model';
+import { GameStatus } from '../../../../core/models/game-status.model';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -281,6 +282,90 @@ describe('GameComponent', () => {
       authServiceSpy.getPlayerId.and.returnValue('Diana');
       gameplayServiceSpy.willStillPlayThisMatch.and.returnValue(true);
       expect(component.canAutoPass()).toBeTrue();
+    });
+
+    const triggerChange = (newState: SharedGameState) => {
+      componentRef.setInput('sharedGameState', newState);
+      component.ngOnChanges({
+        sharedGameState: { currentValue: newState },
+      } as any);
+    };
+
+    it('should not auto pass if not players turn', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Alice');
+      triggerChange(mockState);
+      expect(gameServiceSpy.makeMove).not.toHaveBeenCalled();
+    });
+
+    it('should not auto pass if game status is not AWAIT_ACTION', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.START_TURN,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      triggerChange(mockState);
+      expect(gameServiceSpy.makeMove).not.toHaveBeenCalled();
+    });
+
+    it('should not auto pass if user did not select that option', () => {
+      component.autoPassSelected.set(false);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      triggerChange(mockState);
+      expect(gameServiceSpy.makeMove).not.toHaveBeenCalled();
+    });
+
+    it('should auto pass if status is AWAIT_ACTION and it is players turn and they selected that option', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      triggerChange(mockState);
+      expect(gameServiceSpy.makeMove).toHaveBeenCalledWith(123, []);
+    });
+
+    it('should deselect auto pass after player makes move', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      triggerChange(mockState);
+      expect(component.autoPassSelected()).toBeFalse();
+    });
+
+    it('should deselect auto pass at players end turn', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.END_TURN,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      triggerChange(mockState);
+      expect(component.autoPassSelected()).toBeFalse();
+    });
+
+    it('should maintain auto pass selection on game state change', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.END_TURN,
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Alice');
+      triggerChange(mockState);
+      expect(component.autoPassSelected()).toBeTrue();
     });
   });
 });

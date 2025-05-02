@@ -1,4 +1,12 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  OnChanges,
+  signal,
+  SimpleChanges,
+} from '@angular/core';
 import { RoomSummary } from '../../../../core/models/room-summary.model';
 import { Player } from './player/player.model';
 import { PlayerComponent } from './player/player.component';
@@ -9,14 +17,17 @@ import { GameService } from '../../../../core/services/game.service';
 import { CardsService } from '../../../../core/services/cards.service';
 import { TurnTimer } from '../../../../core/models/message.model';
 import { GameplayService } from '../../../../core/services/gameplay.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { GameStatus } from '../../../../core/models/game-status.model';
+import { Card } from '../../../../core/models/card.model';
 
 @Component({
   selector: 'app-game',
-  imports: [PlayerComponent],
+  imports: [PlayerComponent, MatCheckboxModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
 })
-export class GameComponent {
+export class GameComponent implements OnChanges {
   sharedGameState = input.required<SharedGameState>();
   privateGameState = input.required<PrivateView | null>();
   turnTimer = input.required<TurnTimer | null>();
@@ -25,6 +36,7 @@ export class GameComponent {
   gameService = inject(GameService);
   gameplayService = inject(GameplayService);
   cardsService = inject(CardsService);
+  autoPassSelected = signal(false);
 
   isMyTurn = computed(
     () =>
@@ -32,7 +44,7 @@ export class GameComponent {
   );
 
   passTurn(): void {
-    this.gameService.makeMove(this.roomInfo().roomId, []);
+    this.makeMove([]);
     this.cardsService.clearSelection();
   }
 
@@ -41,9 +53,14 @@ export class GameComponent {
   }
 
   playCards() {
-    const roomId = this.roomInfo().roomId;
     const selectedCards = this.cardsService.selectedCards();
+    this.makeMove(selectedCards);
+  }
+
+  private makeMove(selectedCards: Card[]) {
+    const roomId = this.roomInfo().roomId;
     this.gameService.makeMove(roomId, selectedCards);
+    this.autoPassSelected.set(false);
   }
 
   players = computed<Player[]>(() => {
@@ -107,5 +124,20 @@ export class GameComponent {
       myId,
       this.sharedGameState()
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['sharedGameState']) {
+      const newState = changes['sharedGameState']
+        .currentValue as SharedGameState;
+      if (
+        this.autoPassSelected() &&
+        newState.currentPlayerId == this.authService.getPlayerId()
+      ) {
+        if (newState.status == GameStatus.AWAIT_PLAYER_ACTION) this.passTurn();
+        else if (newState.status == GameStatus.END_TURN)
+          this.autoPassSelected.set(false);
+      }
+    }
   }
 }

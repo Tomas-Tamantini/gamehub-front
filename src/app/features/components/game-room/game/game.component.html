@@ -1,15 +1,32 @@
 <div class="game-area">
-    <div class="game-table">
-        @for (player of players(); track player.playerId) {
-        <div class="player-container" [style]="positionStyle(player.angleAroundTableDegrees)">
-            <app-player [player]="player"></app-player>
-        </div>
-        }
-        @if (isMyTurn()) {
-        <div class="action-area">
-            <button class="action-btn warn" (click)="passTurn()">Pass</button>
-            <button class="action-btn accent" (click)="playCards()" [disabled]="noCardsSelected()">Play</button>
-        </div>
-        }
+  <div class="game-table">
+    @for (player of players(); track player.playerId) {
+    <div
+      class="player-container"
+      [style]="positionStyle(player.angleAroundTableDegrees)"
+    >
+      <app-player [player]="player"></app-player>
     </div>
+    } @if (isMyTurn()) {
+    <div class="action-area">
+      <button class="action-btn warn" (click)="passTurn()">Pass</button>
+      <button
+        class="action-btn accent"
+        (click)="playCards()"
+        [disabled]="noCardsSelected()"
+      >
+        Play
+      </button>
+    </div>
+    } @if(canAutoPass()){
+    <div class="action-area">
+      <mat-checkbox
+        [checked]="autoPassSelected()"
+        (change)="autoPassSelected.set($event.checked)"
+      >
+        Pass</mat-checkbox
+      >
+    </div>
+    }
+  </div>
 </div>
