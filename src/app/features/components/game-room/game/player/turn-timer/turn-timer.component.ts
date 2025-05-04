@@ -28,21 +28,24 @@ export class TurnTimerComponent implements OnInit, OnDestroy {
         this.turnExpiresAtTimestamp() - currentTimestampSeconds;
       if (secondsRemaining < 0) {
         this.currentWidthPercent.set(0);
-        clearInterval(this.intervalId);
-        this.intervalId = null;
+        this.stopTimer();
       } else if (secondsRemaining <= this.totalSeconds) {
         this.currentWidthPercent.set(
           (secondsRemaining / this.totalSeconds) * 100
         );
-      }
+      } else this.currentWidthPercent.set(100);
     }, 1000);
   }
 
-  ngOnDestroy(): void {
+  private stopTimer() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.stopTimer();
   }
 
   barColor = computed(() => {
