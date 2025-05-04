@@ -16,5 +16,5 @@ export interface Player {
   numCards: number;
   cards?: Card[];
   handHistory: Hand[];
-  secondsRemainingInTurn?: number;
+  turnExpiresAtTimestamp?: number;
 }

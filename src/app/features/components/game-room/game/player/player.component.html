@@ -11,9 +11,9 @@
         </span>
       </div>
     </div>
-    @if(player().secondsRemainingInTurn){
+    @if(player().turnExpiresAtTimestamp){
     <app-turn-timer
-      [secondsRemaining]="player().secondsRemainingInTurn!"
+      [turnExpiresAtTimestamp]="player().turnExpiresAtTimestamp!"
     ></app-turn-timer>
     }
     <app-hand

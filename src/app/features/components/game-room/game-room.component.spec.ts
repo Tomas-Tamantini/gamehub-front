@@ -197,7 +197,7 @@ describe('GameRoomComponent', () => {
     it('should reset timer on GAME_STATE message', () => {
       component.turnTimer.set({
         playerId: 'Alice',
-        secondsRemaining: 10,
+        turnExpiresAtTimestamp: 1748699100,
       } as TurnTimer);
       const sharedView = { status: 'START_GAME' } as SharedGameState;
       const mockState = { roomId: 123, sharedView } as GameState;
@@ -209,7 +209,10 @@ describe('GameRoomComponent', () => {
     });
 
     it('should update timer on TURN_TIMER_ALERT message', () => {
-      const timer = { playerId: 'Alice', secondsRemaining: 10 } as TurnTimer;
+      const timer = {
+        playerId: 'Alice',
+        turnExpiresAtTimestamp: 1748699100,
+      } as TurnTimer;
       component.handleMessage({
         messageType: 'TURN_TIMER_ALERT',
         payload: timer,

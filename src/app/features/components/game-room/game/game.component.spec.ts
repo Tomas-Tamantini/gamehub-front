@@ -226,14 +226,19 @@ describe('GameComponent', () => {
     it('should map turn timer for each player', () => {
       const timer = {
         playerId: 'Bob',
-        secondsRemaining: 30,
+        turnExpiresAtTimestamp: 1748699100,
       } as TurnTimer;
       componentRef.setInput('turnTimer', timer);
       const computed = component.players();
       const computedTimer = computed.map(
-        (player) => player.secondsRemainingInTurn
+        (player) => player.turnExpiresAtTimestamp
       );
-      expect(computedTimer).toEqual([undefined, 30, undefined, undefined]);
+      expect(computedTimer).toEqual([
+        undefined,
+        1748699100,
+        undefined,
+        undefined,
+      ]);
     });
 
     it('should map hand history', () => {

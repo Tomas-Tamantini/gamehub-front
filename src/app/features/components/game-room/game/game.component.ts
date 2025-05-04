@@ -89,9 +89,9 @@ export class GameComponent implements OnChanges {
           this.sharedGameState().moveHistory
         )
       );
-      const secondsRemainingInTurn =
+      const turnExpiresAtTimestamp =
         this.turnTimer()?.playerId === playerId
-          ? this.turnTimer()?.secondsRemaining
+          ? this.turnTimer()?.turnExpiresAtTimestamp
           : undefined;
       return {
         playerId,
@@ -103,7 +103,7 @@ export class GameComponent implements OnChanges {
         isTheirTurn,
         cards,
         handHistory,
-        secondsRemainingInTurn,
+        turnExpiresAtTimestamp,
       };
     });
   });

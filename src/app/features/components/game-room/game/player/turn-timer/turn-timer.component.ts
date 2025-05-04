@@ -14,23 +14,28 @@ import {
   styleUrl: './turn-timer.component.scss',
 })
 export class TurnTimerComponent implements OnInit, OnDestroy {
-  private totalSeconds = 30;
-  secondsRemaining = input.required<number>();
+  private readonly totalSeconds = 30;
+  turnExpiresAtTimestamp = input.required<number>();
 
   currentWidthPercent = signal(0);
 
   private intervalId: any;
 
   ngOnInit(): void {
-    this.currentWidthPercent.set(this.initialWidthPercent());
     this.intervalId = setInterval(() => {
-      const newWidth = this.currentWidthPercent() - 1;
-      this.currentWidthPercent.set(newWidth);
-      if (newWidth <= 0) {
-        clearInterval(this.intervalId!);
+      const currentTimestampSeconds = Math.floor(Date.now() / 1000);
+      const secondsRemaining =
+        this.turnExpiresAtTimestamp() - currentTimestampSeconds;
+      if (secondsRemaining < 0) {
+        this.currentWidthPercent.set(0);
+        clearInterval(this.intervalId);
         this.intervalId = null;
+      } else if (secondsRemaining <= this.totalSeconds) {
+        this.currentWidthPercent.set(
+          (secondsRemaining / this.totalSeconds) * 100
+        );
       }
-    }, this.totalSeconds * 10);
+    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -38,14 +43,6 @@ export class TurnTimerComponent implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
-  }
-
-  private initialWidthPercent(): number {
-    if (this.secondsRemaining() <= 0) return 0;
-    return Math.max(
-      0,
-      Math.min(100, (this.secondsRemaining() / this.totalSeconds) * 100)
-    );
   }
 
   barColor = computed(() => {

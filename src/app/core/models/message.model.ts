@@ -16,7 +16,7 @@ export interface ErrorMessage {
 export interface TurnTimer {
   roomId: number;
   playerId: string;
-  secondsRemaining: number;
+  turnExpiresAtTimestamp: number;
 }
 
 export interface GameRoomUpdateMessage {
