@@ -9,7 +9,10 @@ import { CardsService } from '../../../../core/services/cards.service';
 import { Hand } from './player/player.model';
 import { TurnTimer } from '../../../../core/models/message.model';
 import { GameplayService } from '../../../../core/services/gameplay.service';
-import { SharedGameState } from '../../../../core/models/shared-view.model';
+import {
+  Move,
+  SharedGameState,
+} from '../../../../core/models/shared-view.model';
 import { GameStatus } from '../../../../core/models/game-status.model';
 
 describe('GameComponent', () => {
@@ -322,6 +325,7 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.AWAIT_PLAYER_ACTION,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Alice');
       triggerChange(mockState);
@@ -333,6 +337,7 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.START_TURN,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Bob');
       triggerChange(mockState);
@@ -344,6 +349,7 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.AWAIT_PLAYER_ACTION,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Bob');
       triggerChange(mockState);
@@ -355,6 +361,7 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.AWAIT_PLAYER_ACTION,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Bob');
       triggerChange(mockState);
@@ -366,6 +373,7 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.AWAIT_PLAYER_ACTION,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Bob');
       triggerChange(mockState);
@@ -377,9 +385,23 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.END_TURN,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Bob');
       triggerChange(mockState);
+      expect(component.autoPassSelected()).toBeFalse();
+    });
+
+    it('should deselect auto pass if player cannot pass', () => {
+      component.autoPassSelected.set(true);
+      const mockState = {
+        currentPlayerId: 'Bob',
+        status: GameStatus.AWAIT_PLAYER_ACTION,
+        moveHistory: [] as Move[],
+      } as SharedGameState;
+      authServiceSpy.getPlayerId.and.returnValue('Bob');
+      triggerChange(mockState);
+      expect(gameServiceSpy.makeMove).not.toHaveBeenCalled();
       expect(component.autoPassSelected()).toBeFalse();
     });
 
@@ -388,6 +410,7 @@ describe('GameComponent', () => {
       const mockState = {
         currentPlayerId: 'Bob',
         status: GameStatus.END_TURN,
+        moveHistory: [{ playerId: 'Alice' }],
       } as SharedGameState;
       authServiceSpy.getPlayerId.and.returnValue('Alice');
       triggerChange(mockState);

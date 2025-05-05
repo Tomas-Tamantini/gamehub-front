@@ -131,10 +131,9 @@ export class GameComponent implements OnChanges {
     if (changes['sharedGameState']) {
       const newState = changes['sharedGameState']
         .currentValue as SharedGameState;
-      if (
-        this.autoPassSelected() &&
-        newState.currentPlayerId == this.authService.getPlayerId()
-      ) {
+      if (!this.autoPassSelected()) return;
+      if (newState.moveHistory.length == 0) this.autoPassSelected.set(false);
+      else if (newState.currentPlayerId == this.authService.getPlayerId()) {
         if (newState.status == GameStatus.AWAIT_PLAYER_ACTION) this.passTurn();
         else if (newState.status == GameStatus.END_TURN)
           this.autoPassSelected.set(false);
